@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng Nhập · Hoàng Kim Huệ Data Analyst &amp; Business Intelligence</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@600;700;800&display=swap" rel="stylesheet">
+    <script>
+        // Nếu đã đăng nhập sẵn thì vào thẳng trang web chính
+        try {
+            if (localStorage.getItem('hkh_bi_current_user_v1')) {
+                window.location.replace('index.html');
+            }
+        } catch (e) {}
+    </script>
+    <style>
+        :root {
+            --primary: #6D28D9;
+            --primary-dark: #4C1D95;
+            --primary-light: #8B5CF6;
+            --bg: #F8FAFC;
+            --text: #0F172A;
+            --muted: #64748B;
+            --border: #E2E8F0;
+            --font-main: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            --font-heading: 'Space Grotesk', var(--font-main);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: var(--font-main);
+            background: radial-gradient(circle at top left, #EDE9FE 0%, #F8FAFC 45%, #EEF2FF 100%);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px 16px;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .auth-shell {
+            width: 100%;
+            max-width: 980px;
+            background: #FFFFFF;
+            border: 1px solid var(--border);
+            border-radius: 28px;
+            box-shadow: 0 25px 60px -15px rgba(76, 29, 149, 0.16), 0 10px 25px -5px rgba(15, 23, 42, 0.06);
+            display: grid;
+            grid-template-columns: 1.05fr 1fr;
+            overflow: hidden;
+        }
+
+        /* Left Paynext Brand Panel */
+        .auth-brand-panel {
+            background: linear-gradient(145deg, #3B0764 0%, #5B21B6 48%, #7C3AED 100%);
+            color: #FFFFFF;
+            padding: 48px 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .auth-brand-panel::after {
+            content: '';
+            position: absolute;
+            top: -80px;
+            right: -80px;
+            width: 320px;
+            height: 320px;
+            background: radial-gradient(circle, rgba(196, 181, 253, 0.32) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .brand-top { display: flex; align-items: center; gap: 12px; position: relative; z-index: 1; }
+        .brand-logo-sq {
+            width: 46px;
+            height: 46px;
+            background: rgba(255, 255, 255, 0.18);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+        }
+        .brand-top h1 { font-family: var(--font-heading); font-size: 18px; font-weight: 800; line-height: 1.2; }
+        .brand-top span { font-size: 11.5px; opacity: 0.85; font-weight: 600; }
+
+        .brand-mid { margin: 36px 0; position: relative; z-index: 1; }
+        .brand-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(255, 255, 255, 0.16);
+            border: 1px solid rgba(255, 255, 255, 0.28);
+            padding: 5px 14px;
+            border-radius: 999px;
+            font-size: 11.5px;
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+        .brand-mid h2 {
+            font-family: var(--font-heading);
+            font-size: 31px;
+            font-weight: 800;
+            line-height: 1.2;
+            margin-bottom: 14px;
+            letter-spacing: -0.5px;
+        }
+        .brand-mid p { font-size: 14.5px; line-height: 1.65; opacity: 0.9; margin-bottom: 24px; }
+
+        .feature-list { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+        .feature-list li {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 13.5px;
+            font-weight: 600;
+            opacity: 0.95;
+        }
+        .feat-dot {
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            flex-shrink: 0;
+        }
+
+        .brand-foot {
+            font-size: 12px;
+            opacity: 0.78;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            padding-top: 16px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Right Form Panel */
+        .auth-form-panel {
+            padding: 46px 42px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .form-heading { font-family: var(--font-heading); font-size: 26px; font-weight: 800; margin-bottom: 6px; color: var(--text); }
+        .form-sub { font-size: 13.5px; color: var(--muted); margin-bottom: 24px; }
+
+        .auth-tabs {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            background: #F1F5F9;
+            border-radius: 999px;
+            padding: 4px;
+            margin-bottom: 22px;
+        }
+
+        .auth-tab-btn {
+            border: none;
+            background: transparent;
+            padding: 10px 16px;
+            border-radius: 999px;
+            font-size: 13.5px;
+            font-weight: 700;
+            color: var(--muted);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-family: inherit;
+        }
+
+        .auth-tab-btn.active {
+            background: #FFFFFF;
+            color: var(--primary-dark);
+            box-shadow: 0 3px 10px rgba(15, 23, 42, 0.08);
+        }
+
+        .field-group { margin-bottom: 16px; }
+        .field-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: 700;
+            color: #1E293B;
+            margin-bottom: 6px;
+        }
+        .field-input {
+            width: 100%;
+            background: #F8FAFC;
+            border: 1.5px solid var(--border);
+            border-radius: 14px;
+            padding: 12px 16px;
+            font-size: 14px;
+            font-family: inherit;
+            color: var(--text);
+            outline: none;
+            transition: all 0.2s ease;
+        }
+        .field-input:focus {
+            border-color: var(--primary);
+            background: #FFFFFF;
+            box-shadow: 0 0 0 4px rgba(109, 40, 217, 0.12);
+        }
+
+        .btn-submit {
+            width: 100%;
+            background: linear-gradient(135deg, #5B21B6, #7C3AED);
+            color: #FFFFFF;
+            border: none;
+            border-radius: 999px;
+            padding: 13px 20px;
+            font-size: 14.5px;
+            font-weight: 800;
+            font-family: inherit;
+            cursor: pointer;
+            box-shadow: 0 8px 20px rgba(109, 40, 217, 0.28);
+            transition: all 0.2s ease;
+            margin-top: 4px;
+        }
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 26px rgba(109, 40, 217, 0.36);
+            filter: brightness(1.04);
+        }
+
+        .btn-demo {
+            width: 100%;
+            background: #F5F3FF;
+            color: var(--primary-dark);
+            border: 1.5px solid #DDD6FE;
+            border-radius: 999px;
+            padding: 11px 18px;
+            font-size: 13.5px;
+            font-weight: 700;
+            font-family: inherit;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin-top: 10px;
+        }
+        .btn-demo:hover { background: #EDE9FE; border-color: var(--primary-light); }
+
+        .error-box {
+            display: none;
+            background: #FEF2F2;
+            border: 1px solid #FECACA;
+            color: #B91C1C;
+            border-radius: 12px;
+            padding: 10px 14px;
+            font-size: 12.5px;
+            font-weight: 700;
+            margin-bottom: 14px;
+        }
+
+        .demo-hint {
+            margin-top: 16px;
+            background: #F8FAFC;
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 12px 14px;
+            font-size: 12px;
+            color: var(--muted);
+            text-align: center;
+            line-height: 1.6;
+        }
+
+        @media (max-width: 820px) {
+            .auth-shell { grid-template-columns: 1fr; }
+            .auth-brand-panel { padding: 32px 26px; }
+            .auth-form-panel { padding: 32px 26px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="auth-shell">
+        <!-- Left Brand Welcome Panel -->
+        <div class="auth-brand-panel">
+            <div class="brand-top">
+                <div class="brand-logo-sq">⚡</div>
+                <div>
+                    <h1>HOÀNG KIM HUỆ</h1>
+                    <span>Data Analyst &amp; Business Intelligence</span>
+                </div>
+            </div>
+
+            <div class="brand-mid">
+                <div class="brand-pill">🔐 CỔNG XÁC THỰC BẢO MẬT</div>
+                <h2>Nền Tảng AI Agent Phân Tích &amp; Báo Cáo Kinh Doanh</h2>
+                <p>
+                    Đăng nhập tài khoản để tải lên tệp dữ liệu kinh doanh, làm sạch tự động không cần code, trực quan hóa KPI và xuất Báo cáo nghiệm thu chuẩn điều hành.
+                </p>
+                <ul class="feature-list">
+                    <li><span class="feat-dot">✓</span> Tải lên mọi tệp Excel (.xlsx), CSV, JSON</li>
+                    <li><span class="feat-dot">✓</span> Tự động làm sạch &amp; hiển thị trực tiếp bảng dữ liệu sạch</li>
+                    <li><span class="feat-dot">✓</span> Báo cáo nghiệm thu trực quan &amp; 3 đề xuất chiến lược</li>
+                    <li><span class="feat-dot">✓</span> Trợ lý AI Copilot Gemini 1.5 Flash &amp; Đánh giá trải nghiệm</li>
+                </ul>
+            </div>
+
+            <div class="brand-foot">
+                Tác giả &amp; Kiến trúc hệ thống: <b>Hoàng Kim Huệ · Lead BI</b>
+            </div>
+        </div>
+
+        <!-- Right Login / Register Form Panel -->
+        <div class="auth-form-panel">
+            <h2 class="form-heading" id="panelHeading">Chào Mừng Trở Lại</h2>
+            <p class="form-sub" id="panelSub">Vui lòng đăng nhập tài khoản trước khi vào hệ thống xử lý dữ liệu.</p>
+
+            <div class="auth-tabs">
+                <button type="button" id="tabBtnLogin" class="auth-tab-btn active" onclick="switchMode('login')">Đăng Nhập</button>
+                <button type="button" id="tabBtnReg" class="auth-tab-btn" onclick="switchMode('register')">Đăng Ký Mới</button>
+            </div>
+
+            <!-- LOGIN FORM -->
+            <form id="loginForm" onsubmit="submitLogin(event)">
+                <div class="field-group">
+                    <label for="loginEmail">Email / Tên đăng nhập</label>
+                    <input type="text" id="loginEmail" class="field-input" placeholder="VD: admin@hoangkimhue.vn" autocomplete="username" required>
+                </div>
+                <div class="field-group">
+                    <label for="loginPass">Mật khẩu</label>
+                    <input type="password" id="loginPass" class="field-input" placeholder="Nhập mật khẩu..." autocomplete="current-password" required>
+                </div>
+                <div id="loginErr" class="error-box"></div>
+                <button type="submit" class="btn-submit">🔓 Đăng Nhập Vào Web</button>
+                <button type="button" class="btn-demo" onclick="quickDemoEnter()">⚡ Vào Nhanh Bằng Tài Khoản Dùng Thử</button>
+
+                <div class="demo-hint">
+                    Tài khoản mặc định: <b>admin@hoangkimhue.vn</b> · Mật khẩu: <b>123456</b><br>
+                    Hoặc chuyển sang tab <b>Đăng Ký Mới</b> để tạo tài khoản riêng của bạn.
+                </div>
+            </form>
+
+            <!-- REGISTER FORM -->
+            <form id="registerForm" style="display:none;" onsubmit="submitRegister(event)">
+                <div class="field-group">
+                    <label for="regName">Họ và tên</label>
+                    <input type="text" id="regName" class="field-input" placeholder="VD: Nguyễn Minh Anh" required>
+                </div>
+                <div class="field-group">
+                    <label for="regEmail">Email đăng nhập</label>
+                    <input type="email" id="regEmail" class="field-input" placeholder="VD: ban@congty.vn" autocomplete="email" required>
+                </div>
+                <div class="field-group">
+                    <label for="regPass">Mật khẩu (tối thiểu 4 ký tự)</label>
+                    <input type="password" id="regPass" class="field-input" placeholder="Tạo mật khẩu bảo mật..." minlength="4" autocomplete="new-password" required>
+                </div>
+                <div id="regErr" class="error-box"></div>
+                <button type="submit" class="btn-submit">✨ Tạo Tài Khoản &amp; Vào Web Ngay</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        var AUTH_USERS_KEY = 'hkh_bi_users_v1';
+        var AUTH_SESSION_KEY = 'hkh_bi_current_user_v1';
+
+        function getUsers() {
+            var list = [];
+            try { list = JSON.parse(localStorage.getItem(AUTH_USERS_KEY) || '[]'); } catch (e) { list = []; }
+            var hasDefault = list.some(function(u) { return (u.email || '').toLowerCase() === 'admin@hoangkimhue.vn'; });
+            if (!hasDefault) {
+                list.push({ name: 'Hoàng Kim Huệ', email: 'admin@hoangkimhue.vn', password: '123456' });
+                try { localStorage.setItem(AUTH_USERS_KEY, JSON.stringify(list)); } catch (e) {}
+            }
+            return list;
+        }
+
+        function switchMode(mode) {
+            var lf = document.getElementById('loginForm');
+            var rf = document.getElementById('registerForm');
+            var tl = document.getElementById('tabBtnLogin');
+            var tr = document.getElementById('tabBtnReg');
+            var hd = document.getElementById('panelHeading');
+            var sb = document.getElementById('panelSub');
+            document.getElementById('loginErr').style.display = 'none';
+            document.getElementById('regErr').style.display = 'none';
+
+            if (mode === 'register') {
+                lf.style.display = 'none';
+                rf.style.display = 'block';
+                tl.classList.remove('active');
+                tr.classList.add('active');
+                hd.innerText = 'Tạo Tài Khoản Mới';
+                sb.innerText = 'Đăng ký nhanh trong 5 giây để truy cập hệ thống phân tích dữ liệu.';
+            } else {
+                lf.style.display = 'block';
+                rf.style.display = 'none';
+                tl.classList.add('active');
+                tr.classList.remove('active');
+                hd.innerText = 'Chào Mừng Trở Lại';
+                sb.innerText = 'Vui lòng đăng nhập tài khoản trước khi vào hệ thống xử lý dữ liệu.';
+            }
+        }
+
+        function enterPortal(userObj) {
+            try {
+                localStorage.setItem(AUTH_SESSION_KEY, JSON.stringify({
+                    name: userObj.name,
+                    email: userObj.email,
+                    loggedInAt: new Date().toISOString()
+                }));
+            } catch (e) {}
+            window.location.href = 'index.html';
+        }
+
+        function quickDemoEnter() {
+            var users = getUsers();
+            var demo = users.find(function(u) { return u.email.toLowerCase() === 'admin@hoangkimhue.vn'; }) || { name: 'Hoàng Kim Huệ', email: 'admin@hoangkimhue.vn' };
+            enterPortal(demo);
+        }
+
+        function submitLogin(evt) {
+            evt.preventDefault();
+            var email = (document.getElementById('loginEmail').value || '').trim().toLowerCase();
+            var pass = (document.getElementById('loginPass').value || '').trim();
+            var errEl = document.getElementById('loginErr');
+
+            var users = getUsers();
+            var found = users.find(function(u) {
+                return u.email.toLowerCase() === email && u.password === pass;
+            });
+
+            if (!found) {
+                errEl.innerText = '❌ Sai email hoặc mật khẩu! Hãy kiểm tra lại hoặc bấm "Vào Nhanh Bằng Tài Khoản Dùng Thử".';
+                errEl.style.display = 'block';
+                return;
+            }
+            enterPortal(found);
+        }
+
+        function submitRegister(evt) {
+            evt.preventDefault();
+            var name = (document.getElementById('regName').value || '').trim();
+            var email = (document.getElementById('regEmail').value || '').trim().toLowerCase();
+            var pass = (document.getElementById('regPass').value || '').trim();
+            var errEl = document.getElementById('regErr');
+
+            if (!name || !email || pass.length < 4) {
+                errEl.innerText = '⚠️ Vui lòng nhập đầy đủ họ tên, email và mật khẩu từ 4 ký tự.';
+                errEl.style.display = 'block';
+                return;
+            }
+
+            var users = getUsers();
+            if (users.some(function(u) { return u.email.toLowerCase() === email; })) {
+                errEl.innerText = '⚠️ Email này đã tồn tại. Vui lòng chuyển sang tab Đăng Nhập.';
+                errEl.style.display = 'block';
+                return;
+            }
+
+            var newUser = { name: name, email: email, password: pass };
+            users.push(newUser);
+            try { localStorage.setItem(AUTH_USERS_KEY, JSON.stringify(users)); } catch (e) {}
+            enterPortal(newUser);
+        }
+
+        // Seed default user on load
+        getUsers();
+    </script>
+</body>
+</html>

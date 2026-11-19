@@ -1,0 +1,2191 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hoàng Kim Huệ · Data Analyst & Business Intelligence — Nền Tảng AI Agent Phân Tích Dữ Liệu</title>
+    <script>
+        // Bắt buộc đi qua trang phụ đăng nhập (login.html) trước khi vào web
+        try {
+            if (!localStorage.getItem('hkh_bi_current_user_v1')) {
+                window.location.replace('login.html');
+            }
+        } catch (e) {}
+    </script>
+    <!-- Google Fonts: Plus Jakarta Sans & Space Grotesk -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@600;700;800&display=swap" rel="stylesheet">
+    
+        <style>
+        :root {
+            --paynext-primary: #6D28D9;
+            --paynext-primary-dark: #4C1D95;
+            --paynext-primary-light: #8B5CF6;
+            --paynext-purple-subtle: #EDE9FE;
+            --paynext-bg: #F8FAFC;
+            --paynext-card-bg: #FFFFFF;
+            --paynext-text-main: #0F172A;
+            --paynext-text-muted: #64748B;
+            --paynext-border: #E2E8F0;
+            --paynext-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.05), 0 4px 10px -2px rgba(15, 23, 42, 0.02);
+            --paynext-shadow-lg: 0 20px 35px -5px rgba(109, 40, 217, 0.10), 0 8px 16px -4px rgba(15, 23, 42, 0.04);
+            --neo-border: 1px solid #E2E8F0;
+            --font-main: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            --font-heading: 'Space Grotesk', var(--font-main);
+        }
+
+        body.dark-mode {
+            --paynext-bg: #0B0F17;
+            --paynext-card-bg: #131A26;
+            --paynext-text-main: #F8FAFC;
+            --paynext-text-muted: #94A3B8;
+            --paynext-border: #232D3F;
+            --paynext-purple-subtle: #1E1B4B;
+            --neo-border: 1px solid #232D3F;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: var(--font-main);
+            background-color: var(--paynext-bg);
+            color: var(--paynext-text-main);
+            line-height: 1.55;
+            padding: 18px 16px 96px;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .portal-wrapper { max-width: 1240px; margin: 0 auto; }
+
+        /* 1. TOP NAVBAR (Paynext Clean Style) */
+        .neo-nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 22px;
+            background: var(--paynext-card-bg);
+            border: 1px solid var(--paynext-border);
+            box-shadow: var(--paynext-shadow);
+            border-radius: 18px;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .brand-logo { display: flex; align-items: center; gap: 12px; text-decoration: none; color: inherit; }
+
+        .brand-icon {
+            width: 42px;
+            height: 42px;
+            background: linear-gradient(135deg, #4C1D95, #7C3AED);
+            color: #FFFFFF;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            box-shadow: 0 4px 12px rgba(109, 40, 217, 0.25);
+        }
+
+        .brand-text h1 {
+            font-family: var(--font-heading);
+            font-size: 17px;
+            font-weight: 800;
+            letter-spacing: -0.3px;
+            line-height: 1.15;
+            color: var(--paynext-text-main);
+        }
+
+        .brand-text span {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--paynext-text-muted);
+            letter-spacing: 0.2px;
+        }
+
+        .neo-nav-links { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+
+        .neo-tab-btn {
+            background: transparent;
+            border: 1px solid transparent;
+            padding: 8px 14px;
+            border-radius: 999px;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            color: var(--paynext-text-muted);
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .neo-tab-btn:hover {
+            background: var(--paynext-purple-subtle);
+            color: var(--paynext-primary);
+        }
+
+        .neo-tab-btn.active {
+            background: var(--paynext-primary);
+            color: #FFFFFF;
+            box-shadow: 0 4px 14px rgba(109, 40, 217, 0.28);
+        }
+
+        .nav-author-badge {
+            background: var(--paynext-purple-subtle);
+            color: var(--paynext-primary-dark);
+            border: 1px solid #DDD6FE;
+            padding: 6px 14px;
+            border-radius: 999px;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        body.dark-mode .nav-author-badge { color: #DDD6FE; border-color: #4C1D95; }
+
+        /* 2. BUTTONS (Paynext Modern Pills) */
+        .btn-neo-primary {
+            background: linear-gradient(135deg, #5B21B6, #7C3AED);
+            color: #FFFFFF;
+            border: none;
+            box-shadow: 0 6px 16px rgba(109, 40, 217, 0.25);
+            padding: 11px 22px;
+            border-radius: 999px;
+            font-weight: 700;
+            font-size: 13.5px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-neo-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 22px rgba(109, 40, 217, 0.35);
+            filter: brightness(1.05);
+        }
+
+        .btn-neo-secondary {
+            background: var(--paynext-card-bg);
+            color: var(--paynext-primary-dark);
+            border: 1.5px solid #DDD6FE;
+            padding: 10px 20px;
+            border-radius: 999px;
+            font-weight: 700;
+            font-size: 13.5px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        body.dark-mode .btn-neo-secondary { color: #E2E8F0; border-color: #334155; }
+
+        .btn-neo-secondary:hover {
+            transform: translateY(-1.5px);
+            background: var(--paynext-purple-subtle);
+            border-color: var(--paynext-primary-light);
+        }
+
+        /* 3. HERO CONTAINER (Paynext Purple Gradient Banner - Image 5) */
+        .neo-hero-container {
+            background: linear-gradient(135deg, #4C1D95 0%, #6D28D9 52%, #7C3AED 100%);
+            border-radius: 26px;
+            padding: 44px 38px;
+            margin-bottom: 24px;
+            display: grid;
+            grid-template-columns: 1.15fr 0.85fr;
+            gap: 36px;
+            align-items: center;
+            color: #FFFFFF;
+            box-shadow: var(--paynext-shadow-lg);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .neo-hero-container::after {
+            content: '';
+            position: absolute;
+            top: -80px;
+            right: -60px;
+            width: 340px;
+            height: 340px;
+            background: radial-gradient(circle, rgba(196, 181, 253, 0.28) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .neo-hero-container .btn-neo-primary {
+            background: #FFFFFF;
+            color: #4C1D95;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.14);
+        }
+
+        .neo-hero-container .btn-neo-secondary {
+            background: rgba(255, 255, 255, 0.14);
+            color: #FFFFFF;
+            border: 1px solid rgba(255, 255, 255, 0.35);
+            backdrop-filter: blur(8px);
+        }
+
+        .neo-hero-container .btn-neo-secondary:hover {
+            background: rgba(255, 255, 255, 0.24);
+        }
+
+        .hero-title {
+            font-family: var(--font-heading);
+            font-size: 36px;
+            font-weight: 800;
+            line-height: 1.18;
+            letter-spacing: -0.5px;
+            margin-bottom: 14px;
+        }
+
+        .hero-desc {
+            font-size: 15.5px;
+            line-height: 1.65;
+            opacity: 0.92;
+            margin-bottom: 24px;
+        }
+
+        .hero-buttons { display: flex; gap: 12px; flex-wrap: wrap; }
+
+        .hero-card-widget {
+            background: rgba(255, 255, 255, 0.97);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            box-shadow: 0 18px 36px rgba(15, 23, 42, 0.18);
+            border-radius: 22px;
+            padding: 22px;
+            color: #0F172A;
+            position: relative;
+            z-index: 1;
+        }
+
+        .player-badge-float {
+            display: inline-block;
+            background: #EDE9FE;
+            color: #5B21B6;
+            padding: 4px 12px;
+            border-radius: 999px;
+            font-size: 11px;
+            font-weight: 800;
+            margin-bottom: 12px;
+        }
+
+        .hero-terminal {
+            background: linear-gradient(135deg, #F8FAFC 0%, #F5F3FF 100%);
+            color: #312E81;
+            border: 1px solid #DDD6FE;
+            font-family: var(--font-main);
+            font-size: 12.5px;
+            font-weight: 500;
+            line-height: 1.65;
+            padding: 16px 18px;
+            border-radius: 14px;
+            height: 175px;
+            overflow-y: auto;
+            margin-bottom: 14px;
+            white-space: pre-wrap;
+        }
+        body.dark-mode .hero-terminal {
+            background: #1A2333;
+            color: #E2E8F0;
+            border-color: #334155;
+        }
+
+        .step3-validation-box {
+            background: linear-gradient(135deg, #F8FAFC 0%, #F5F3FF 100%);
+            border: 1px solid #DDD6FE;
+            border-left: 4px solid var(--paynext-primary);
+            border-radius: 16px;
+            padding: 18px 20px;
+            color: var(--paynext-text-main);
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        body.dark-mode .step3-validation-box {
+            background: #1A2333;
+            border-color: #334155;
+            border-left-color: var(--paynext-primary-light);
+        }
+
+        .step3-log-row {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            background: var(--paynext-card-bg);
+            border: 1px solid var(--paynext-border);
+            border-radius: 12px;
+            padding: 10px 14px;
+            font-size: 13px;
+            line-height: 1.5;
+            color: var(--paynext-text-main);
+        }
+
+        .step3-log-badge {
+            flex-shrink: 0;
+            padding: 3px 10px;
+            border-radius: 999px;
+            font-size: 11px;
+            font-weight: 800;
+            background: #EDE9FE;
+            color: #5B21B6;
+        }
+        .step3-log-badge.ok { background: #DCFCE7; color: #15803D; }
+        .step3-log-badge.info { background: #E0F2FE; color: #0369A1; }
+        .step3-log-badge.warn { background: #FEF3C7; color: #92400E; }
+
+        .player-controls-wrap { display: flex; align-items: center; gap: 12px; }
+
+        .btn-play-circle {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #5B21B6, #7C3AED);
+            color: #FFFFFF;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            box-shadow: 0 4px 12px rgba(109, 40, 217, 0.25);
+        }
+
+        .progress-bar-neo {
+            height: 7px;
+            background: #E2E8F0;
+            border-radius: 999px;
+            overflow: hidden;
+            margin-bottom: 6px;
+        }
+
+        .progress-fill {
+            width: 45%;
+            height: 100%;
+            background: linear-gradient(90deg, #6D28D9, #8B5CF6);
+            border-radius: 999px;
+            transition: width 0.3s ease;
+        }
+
+        .time-text { font-size: 11px; font-weight: 700; color: #64748B; }
+
+        /* 4. COUNTER RIBBON */
+        .neo-counter-ribbon {
+            background: var(--paynext-card-bg);
+            border: 1px solid var(--paynext-border);
+            box-shadow: var(--paynext-shadow);
+            border-radius: 20px;
+            padding: 20px 28px;
+            margin-bottom: 28px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            text-align: center;
+        }
+
+        .ribbon-stat-item h3 {
+            font-family: var(--font-heading);
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--paynext-primary-dark);
+            margin-bottom: 3px;
+        }
+
+        body.dark-mode .ribbon-stat-item h3 { color: #C4B5FD; }
+
+        .ribbon-stat-item p { font-size: 12.5px; color: var(--paynext-text-muted); font-weight: 600; }
+
+        /* 5. CARDS, ROADMAP, PROFILE & SPOTLIGHT (Paynext Image 5 Soft Cards) */
+        .neo-card, .step-container-box {
+            background: var(--paynext-card-bg);
+            border: 1px solid var(--paynext-border);
+            box-shadow: var(--paynext-shadow);
+            border-radius: 20px;
+            padding: 26px 28px;
+            margin-bottom: 22px;
+        }
+
+        .step-container-box.user-step { border-top: 3.5px solid #6D28D9; }
+        .step-container-box.ai-step { border-top: 3.5px solid #2563EB; }
+
+        .step-badge-tag {
+            display: inline-block;
+            padding: 5px 14px;
+            border-radius: 999px;
+            font-size: 11.5px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            letter-spacing: 0.2px;
+        }
+
+        .roadmap-grid-4 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 18px;
+            margin-bottom: 28px;
+        }
+
+        .roadmap-card {
+            background: var(--paynext-card-bg);
+            border: 1px solid var(--paynext-border);
+            box-shadow: var(--paynext-shadow);
+            border-radius: 20px;
+            padding: 24px;
+            cursor: pointer;
+            transition: all 0.22s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .roadmap-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--paynext-shadow-lg);
+            border-color: #C4B5FD;
+        }
+
+        .roadmap-num {
+            width: 36px;
+            height: 36px;
+            border-radius: 12px;
+            background: var(--paynext-purple-subtle);
+            color: var(--paynext-primary-dark);
+            font-weight: 800;
+            font-size: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 14px;
+        }
+
+        .roadmap-card h4 { font-size: 16.5px; font-weight: 800; margin-bottom: 6px; color: var(--paynext-text-main); }
+        .roadmap-card p { font-size: 13px; color: var(--paynext-text-muted); margin-bottom: 14px; line-height: 1.55; }
+        .roadmap-card .action-link { font-size: 12.5px; font-weight: 700; color: var(--paynext-primary); }
+
+        .specialist-profile-card {
+            background: var(--paynext-card-bg);
+            border: 1px solid var(--paynext-border);
+            box-shadow: var(--paynext-shadow);
+            border-radius: 22px;
+            padding: 28px 32px;
+            display: grid;
+            grid-template-columns: 96px 1fr;
+            gap: 24px;
+            align-items: center;
+            margin-bottom: 28px;
+        }
+
+        .profile-avatar-box {
+            width: 96px;
+            height: 96px;
+            border-radius: 24px;
+            background: linear-gradient(135deg, #4C1D95, #8B5CF6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 42px;
+            box-shadow: 0 10px 24px rgba(109, 40, 217, 0.25);
+        }
+
+        .hottest-show-card {
+            background: var(--paynext-card-bg);
+            border: 1px solid var(--paynext-border);
+            border-left: 5px solid #6D28D9;
+            box-shadow: var(--paynext-shadow);
+            border-radius: 22px;
+            padding: 24px 28px;
+            display: grid;
+            grid-template-columns: 120px 1fr auto;
+            gap: 24px;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .hottest-show-media {
+            background: linear-gradient(135deg, #EDE9FE, #F5F3FF);
+            border-radius: 18px;
+            padding: 16px;
+            text-align: center;
+        }
+
+        .badge-number-one {
+            background: #6D28D9;
+            color: #FFFFFF;
+            font-size: 10px;
+            font-weight: 800;
+            padding: 3px 8px;
+            border-radius: 999px;
+            margin-bottom: 8px;
+            display: inline-block;
+        }
+
+        .spotlight-info h3 { font-size: 19px; font-weight: 800; margin-bottom: 6px; color: var(--paynext-text-main); }
+        .spotlight-info p { font-size: 13.5px; color: var(--paynext-text-muted); margin-bottom: 10px; line-height: 1.55; }
+        .spotlight-meta { font-size: 12px; color: #64748B; display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 10px; }
+
+        .btn-spotlight-play {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: var(--paynext-purple-subtle);
+            color: var(--paynext-primary-dark);
+            border: 1px solid #DDD6FE;
+            font-size: 20px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-spotlight-play:hover { background: var(--paynext-primary); color: #FFFFFF; transform: scale(1.06); }
+
+        /* 6. PILLS, INPUTS, DROPZONE */
+        .tag-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 5px 13px;
+            border-radius: 999px;
+            font-size: 12px;
+            font-weight: 700;
+            background: #F1F5F9;
+            color: #334155;
+            border: 1px solid var(--paynext-border);
+        }
+
+        .tag-pill.yellow { background: rgba(255, 255, 255, 0.18); color: #FFFFFF; border-color: rgba(255, 255, 255, 0.32); }
+        .neo-card .tag-pill.yellow, .hottest-show-card .tag-pill.yellow, .specialist-profile-card .tag-pill.yellow, .chat-header .tag-pill.yellow {
+            background: #FEF3C7; color: #92400E; border-color: #FDE68A;
+        }
+        .tag-pill.purple { background: #EDE9FE; color: #5B21B6; border-color: #DDD6FE; }
+        .tag-pill.red { background: #FEE2E2; color: #B91C1C; border-color: #FECACA; }
+
+        .neo-input, .neo-select {
+            background: #F8FAFC;
+            border: 1px solid var(--paynext-border);
+            border-radius: 14px;
+            padding: 11px 16px;
+            font-size: 13.5px;
+            font-family: inherit;
+            color: var(--paynext-text-main);
+            outline: none;
+            transition: all 0.2s ease;
+        }
+
+        body.dark-mode .neo-input, body.dark-mode .neo-select { background: #1E293B; color: #F8FAFC; }
+
+        .neo-input:focus, .neo-select:focus {
+            border-color: var(--paynext-primary);
+            background: var(--paynext-card-bg);
+            box-shadow: 0 0 0 3px rgba(109, 40, 217, 0.12);
+        }
+
+        .upload-dropzone {
+            border: 2px dashed #CBD5E1;
+            border-radius: 20px;
+            padding: 36px 24px;
+            text-align: center;
+            background: #F8FAFC;
+            transition: all 0.2s ease;
+        }
+
+        body.dark-mode .upload-dropzone { background: #1A2333; border-color: #334155; }
+        .upload-dropzone:hover { border-color: var(--paynext-primary); background: var(--paynext-purple-subtle); }
+
+        /* 7. STEP 4 KPI TILES & CHARTS */
+        .kpi-grid-5 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(195px, 1fr));
+            gap: 14px;
+            margin-bottom: 22px;
+        }
+
+        .kpi-tile {
+            background: var(--paynext-card-bg);
+            border: 1px solid var(--paynext-border);
+            border-radius: 16px;
+            padding: 18px 20px;
+            box-shadow: 0 4px 12px rgba(15, 23, 42, 0.03);
+        }
+
+        .kpi-tile.purple { border-top: 3.5px solid #7C3AED; }
+        .kpi-tile.green { border-top: 3.5px solid #16A34A; }
+        .kpi-tile.yellow { border-top: 3.5px solid #D97706; }
+        .kpi-tile.cyan { border-top: 3.5px solid #0284C7; }
+        .kpi-tile.red { border-top: 3.5px solid #DC2626; }
+
+        .kpi-tile-label { font-size: 11px; font-weight: 700; color: var(--paynext-text-muted); letter-spacing: 0.4px; margin-bottom: 6px; }
+        .kpi-tile-value { font-family: var(--font-heading); font-size: 24px; font-weight: 800; color: var(--paynext-text-main); }
+
+        .charts-row-2 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+            gap: 18px;
+        }
+
+        /* 8. STEP 5 FILTER BAR & TABLE */
+        .filter-bar-neo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 16px;
+        }
+
+        .table-container-neo {
+            overflow-x: auto;
+            border: 1px solid var(--paynext-border);
+            border-radius: 16px;
+            background: var(--paynext-card-bg);
+        }
+
+        .neo-table { width: 100%; border-collapse: collapse; font-size: 13px; text-align: left; }
+        .neo-table th {
+            background: #F8FAFC;
+            color: #475569;
+            font-weight: 700;
+            padding: 12px 14px;
+            border-bottom: 1px solid var(--paynext-border);
+            white-space: nowrap;
+        }
+        body.dark-mode .neo-table th { background: #1E293B; color: #CBD5E1; }
+        .neo-table td { padding: 11px 14px; border-bottom: 1px solid var(--paynext-border); color: var(--paynext-text-main); }
+        .neo-table tbody tr:hover { background: #F8FAFC; }
+        body.dark-mode .neo-table tbody tr:hover { background: #1E293B; }
+
+        /* 9. AI COPILOT CHAT */
+        .chat-container-neo {
+            background: var(--paynext-card-bg);
+            border: 1px solid var(--paynext-border);
+            box-shadow: var(--paynext-shadow);
+            border-radius: 22px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            height: 600px;
+        }
+
+        .chat-header {
+            background: linear-gradient(135deg, #4C1D95, #6D28D9);
+            color: #FFFFFF;
+            padding: 16px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .chat-body {
+            flex: 1;
+            padding: 22px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .chat-footer {
+            display: flex;
+            gap: 10px;
+            padding: 14px 20px;
+            border-top: 1px solid var(--paynext-border);
+            background: var(--paynext-card-bg);
+        }
+
+        /* ==============================================================================
+           10. BÁO CÁO CUỐI CÙNG (EXACT 4-IMAGE EXECUTIVE BI REPORT)
+        ============================================================================== */
+        .report-header-card {
+            background: var(--paynext-card-bg);
+            border: 1px solid var(--paynext-border);
+            border-radius: 22px;
+            padding: 30px 34px;
+            box-shadow: var(--paynext-shadow);
+            margin-bottom: 20px;
+        }
+
+        .report-top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .report-brand-name { font-size: 20px; font-weight: 900; color: var(--paynext-text-main); letter-spacing: -0.4px; }
+
+        .badge-verified-blue {
+            background: #E0F2FE;
+            color: #0284C7;
+            font-size: 12px;
+            font-weight: 700;
+            padding: 6px 14px;
+            border-radius: 999px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-report-pill {
+            background: var(--paynext-card-bg);
+            border: 1px solid var(--paynext-border);
+            color: var(--paynext-text-muted);
+            padding: 6px 14px;
+            border-radius: 999px;
+            font-size: 12.5px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-report-pill:hover { background: #F1F5F9; color: var(--paynext-text-main); }
+
+        .report-title-hero-grid {
+            display: grid;
+            grid-template-columns: 1fr 390px;
+            gap: 28px;
+            align-items: center;
+            margin-bottom: 22px;
+        }
+
+        .report-main-title { font-size: 32px; font-weight: 900; color: var(--paynext-text-main); line-height: 1.2; margin-bottom: 8px; letter-spacing: -0.5px; }
+        .report-main-subtitle { font-size: 14.5px; color: var(--paynext-text-muted); }
+
+        .navy-hero-card {
+            background: #102A43;
+            border-left: 4px solid #BE123C;
+            border-radius: 18px;
+            padding: 24px 28px;
+            color: #FFFFFF;
+            box-shadow: 0 12px 28px -5px rgba(16, 42, 67, 0.35);
+        }
+
+        .navy-hero-label { font-size: 11px; font-weight: 800; color: #9FB3C8; letter-spacing: 0.6px; text-transform: uppercase; margin-bottom: 6px; }
+        .navy-hero-value { font-size: 38px; font-weight: 900; line-height: 1.1; margin-bottom: 6px; letter-spacing: -0.5px; }
+        .navy-hero-meta { font-size: 13px; color: #BCCCDC; }
+
+        .report-metadata-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px 0 8px;
+            border-top: 1px solid var(--paynext-border);
+            font-size: 12.5px;
+            color: var(--paynext-text-muted);
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .report-metadata-bar b { color: var(--paynext-text-main); display: block; font-size: 13px; margin-top: 2px; }
+
+        .report-subtabs-row { display: flex; gap: 6px; margin-top: 14px; flex-wrap: wrap; }
+
+        .report-subtab-btn {
+            background: var(--paynext-card-bg);
+            border: 1px solid var(--paynext-border);
+            padding: 7px 18px;
+            border-radius: 999px;
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--paynext-text-muted);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .report-subtab-btn.active { border-color: #BE123C; color: var(--paynext-text-main); background: #FFF1F2; }
+        body.dark-mode .report-subtab-btn.active { background: #3B1222; color: #FFFFFF; }
+
+        .rep-kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+            gap: 16px;
+            margin-bottom: 18px;
+        }
+
+        .rep-kpi-box {
+            background: var(--paynext-card-bg);
+            border: 1px solid var(--paynext-border);
+            border-radius: 18px;
+            padding: 22px 24px;
+            box-shadow: var(--paynext-shadow);
+        }
+
+        .rep-kpi-head { display: flex; justify-content: space-between; align-items: center; font-size: 13px; font-weight: 700; color: var(--paynext-text-muted); margin-bottom: 12px; }
+        .rep-kpi-icon { width: 28px; height: 28px; border-radius: 50%; background: #EFF6FF; color: #1E3A8A; display: flex; align-items: center; justify-content: center; font-size: 13px; }
+        .rep-kpi-val { font-size: 30px; font-weight: 900; color: var(--paynext-text-main); line-height: 1.15; margin-bottom: 6px; }
+        .rep-kpi-sub { font-size: 12px; color: var(--paynext-text-muted); }
+
+        .report-tip-bar {
+            background: var(--paynext-card-bg);
+            border: 1px solid var(--paynext-border);
+            border-radius: 12px;
+            padding: 11px 18px;
+            font-size: 12px;
+            color: var(--paynext-text-muted);
+            margin-bottom: 20px;
+        }
+
+        .bi-chart-card {
+            background: var(--paynext-card-bg);
+            border: 1px solid var(--paynext-border);
+            border-radius: 20px;
+            padding: 26px 28px;
+            box-shadow: var(--paynext-shadow);
+            margin-bottom: 20px;
+        }
+
+        .bi-chart-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 18px; flex-wrap: wrap; gap: 12px; }
+        .bi-chart-title { font-size: 20px; font-weight: 800; color: var(--paynext-text-main); }
+        .bi-chart-sub { font-size: 13px; color: var(--paynext-text-muted); margin-top: 3px; }
+
+        .rep-line-pill {
+            background: #F1F5F9;
+            border: 1px solid var(--paynext-border);
+            padding: 5px 14px;
+            border-radius: 999px;
+            font-size: 12px;
+            font-weight: 700;
+            color: #475569;
+            cursor: pointer;
+        }
+
+        .rep-line-pill.active { background: #102A43; color: #FFFFFF; border-color: #102A43; }
+
+        .chart-content-grid { display: grid; grid-template-columns: 1fr 330px; gap: 28px; align-items: center; }
+
+        .ai-insight-callout-box {
+            background: #F4F7FA;
+            border: 1px solid var(--paynext-border);
+            border-left: 4px solid #991B1B;
+            border-radius: 14px;
+            padding: 18px 20px;
+        }
+
+        body.dark-mode .ai-insight-callout-box { background: #1A2333; border-left-color: #EF4444; }
+        .callout-header-tag { font-size: 12.5px; font-weight: 800; color: #102A43; margin-bottom: 6px; }
+        body.dark-mode .callout-header-tag { color: #F8FAFC; }
+        .callout-body-text { font-size: 13.5px; line-height: 1.55; color: #334155; }
+        body.dark-mode .callout-body-text { color: #CBD5E1; }
+
+        .donut-legend-row { display: flex; justify-content: center; gap: 10px; margin-top: 16px; flex-wrap: wrap; }
+        .legend-pill { background: #F4F7FA; border: 1px solid var(--paynext-border); padding: 5px 13px; border-radius: 999px; font-size: 12px; font-weight: 600; color: #334155; }
+        body.dark-mode .legend-pill { background: #1E293B; color: #E2E8F0; }
+
+        .recommendations-3col-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; margin-top: 14px; }
+        .recommendation-card { background: #F8FAFC; border: 1px solid var(--paynext-border); border-radius: 16px; padding: 20px; }
+        body.dark-mode .recommendation-card { background: #1A2333; }
+        .rec-pill-label { font-size: 11px; font-weight: 800; color: #991B1B; margin-bottom: 8px; }
+        .rec-card-title { font-size: 15.5px; font-weight: 800; color: var(--paynext-text-main); margin-bottom: 8px; line-height: 1.35; }
+        .rec-card-desc { font-size: 13px; color: var(--paynext-text-muted); line-height: 1.55; }
+
+        /* 11. FLOATING BOTTOM PILL BAR (Images 1-4) */
+        .floating-bottom-nav {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(255, 255, 255, 0.96);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--paynext-border);
+            border-radius: 999px;
+            box-shadow: 0 12px 32px rgba(15, 23, 42, 0.14);
+            padding: 6px 10px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            z-index: 999;
+        }
+
+        body.dark-mode .floating-bottom-nav { background: rgba(19, 26, 38, 0.96); }
+
+        .bottom-nav-item {
+            background: transparent;
+            border: none;
+            padding: 8px 18px;
+            border-radius: 999px;
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--paynext-text-muted);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            position: relative;
+        }
+
+        .bottom-nav-item:hover { color: var(--paynext-primary); background: var(--paynext-purple-subtle); }
+        .bottom-nav-item.active { color: var(--paynext-text-main); font-weight: 800; }
+        .bottom-nav-item.active::after {
+            content: '';
+            position: absolute;
+            bottom: 3px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 14px;
+            height: 2.5px;
+            background: #BE123C;
+            border-radius: 99px;
+        }
+
+        /* TAB PANES & FOOTER */
+        .tab-pane { display: none; }
+        .tab-pane.active { display: block; animation: fadeIn 0.22s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+
+        .portal-footer {
+            text-align: center;
+            font-size: 12.5px;
+            color: var(--paynext-text-muted);
+            padding: 20px 10px 10px;
+        }
+
+        @media (max-width: 900px) {
+            .neo-hero-container, .report-title-hero-grid, .chart-content-grid, .specialist-profile-card, .hottest-show-card {
+                grid-template-columns: 1fr;
+            }
+            .neo-counter-ribbon { grid-template-columns: 1fr; }
+        }
+
+        /* 12. AUTH LOGIN/REGISTER MODAL */
+        .auth-modal-backdrop {
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.58);
+            backdrop-filter: blur(6px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            padding: 16px;
+        }
+        .auth-modal-backdrop.open { display: flex; animation: fadeIn 0.2s ease; }
+
+        .auth-modal-card {
+            background: var(--paynext-card-bg);
+            border: 1px solid var(--paynext-border);
+            border-radius: 24px;
+            box-shadow: 0 25px 50px -12px rgba(15, 23, 42, 0.28);
+            width: 100%;
+            max-width: 440px;
+            overflow: hidden;
+        }
+
+        .auth-modal-header {
+            background: linear-gradient(135deg, #4C1D95 0%, #6D28D9 60%, #7C3AED 100%);
+            color: #FFFFFF;
+            padding: 24px 26px 20px;
+            position: relative;
+        }
+
+        .auth-close-btn {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            border: none;
+            background: rgba(255, 255, 255, 0.18);
+            color: #FFFFFF;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        .auth-close-btn:hover { background: rgba(255, 255, 255, 0.3); }
+
+        .auth-tabs {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            background: #F1F5F9;
+            border-radius: 999px;
+            padding: 4px;
+            margin-bottom: 18px;
+        }
+        body.dark-mode .auth-tabs { background: #1E293B; }
+
+        .auth-tab-btn {
+            border: none;
+            background: transparent;
+            padding: 8px 14px;
+            border-radius: 999px;
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--paynext-text-muted);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .auth-tab-btn.active {
+            background: var(--paynext-card-bg);
+            color: var(--paynext-primary-dark);
+            box-shadow: 0 2px 8px rgba(15, 23, 42, 0.08);
+        }
+        body.dark-mode .auth-tab-btn.active { color: #C4B5FD; }
+
+        .auth-field { margin-bottom: 14px; }
+        .auth-field label { display: block; font-size: 12.5px; font-weight: 700; color: var(--paynext-text-main); margin-bottom: 6px; }
+        .auth-field input { width: 100%; }
+
+        .user-auth-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--paynext-purple-subtle);
+            border: 1px solid #DDD6FE;
+            padding: 5px 12px 5px 6px;
+            border-radius: 999px;
+            font-size: 12.5px;
+            font-weight: 700;
+            color: var(--paynext-primary-dark);
+        }
+        body.dark-mode .user-auth-chip { color: #EDE9FE; border-color: #4C1D95; }
+
+        .user-avatar-dot {
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #4C1D95, #7C3AED);
+            color: #FFFFFF;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 800;
+        }
+
+        /* 13. STEP 2 CLEANED DATA SUMMARY */
+        .clean-summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+            gap: 14px;
+            margin-bottom: 20px;
+        }
+
+        .clean-stat-card {
+            background: #F8FAFC;
+            border: 1px solid var(--paynext-border);
+            border-radius: 16px;
+            padding: 16px 18px;
+        }
+        body.dark-mode .clean-stat-card { background: #1A2333; }
+        .clean-stat-label { font-size: 11.5px; font-weight: 700; color: var(--paynext-text-muted); margin-bottom: 4px; text-transform: uppercase; }
+        .clean-stat-val { font-family: var(--font-heading); font-size: 24px; font-weight: 800; color: var(--paynext-text-main); }
+
+        .clean-badge-ok {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            background: #DCFCE7;
+            color: #15803D;
+            padding: 3px 10px;
+            border-radius: 999px;
+            font-size: 11.5px;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        .custom-clean-panel {
+            background: #F8FAFC;
+            border: 1px solid var(--paynext-border);
+            border-radius: 18px;
+            padding: 20px 22px;
+            margin-bottom: 20px;
+        }
+        body.dark-mode .custom-clean-panel { background: #1A2333; }
+
+        .clean-options-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+            gap: 10px 14px;
+            margin-bottom: 14px;
+        }
+
+        .clean-check-item {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            background: var(--paynext-card-bg);
+            border: 1px solid var(--paynext-border);
+            border-radius: 12px;
+            padding: 10px 13px;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--paynext-text-main);
+            cursor: pointer;
+            transition: border-color 0.2s ease;
+        }
+        .clean-check-item:hover { border-color: var(--paynext-primary-light); }
+        .clean-check-item input[type="checkbox"] {
+            width: 16px;
+            height: 16px;
+            accent-color: var(--paynext-primary);
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+
+        .clean-applied-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-top: 10px;
+        }
+
+        /* 14. CUSTOMER FEEDBACK & RATING SECTION */
+        .feedback-layout-grid {
+            display: grid;
+            grid-template-columns: 1fr 1.15fr;
+            gap: 24px;
+            align-items: start;
+        }
+        @media (max-width: 900px) { .feedback-layout-grid { grid-template-columns: 1fr; } }
+
+        .star-rating-picker { display: flex; align-items: center; gap: 6px; margin-bottom: 8px; }
+        .star-btn {
+            background: transparent;
+            border: none;
+            font-size: 30px;
+            color: #CBD5E1;
+            cursor: pointer;
+            transition: transform 0.15s ease, color 0.15s ease;
+            line-height: 1;
+        }
+        .star-btn:hover { transform: scale(1.15); }
+        .star-btn.active { color: #F59E0B; }
+
+        .aspect-chips-wrap { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
+        .aspect-chip {
+            background: #F1F5F9;
+            border: 1px solid var(--paynext-border);
+            color: #475569;
+            padding: 6px 14px;
+            border-radius: 999px;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .aspect-chip.selected {
+            background: var(--paynext-purple-subtle);
+            border-color: var(--paynext-primary);
+            color: var(--paynext-primary-dark);
+        }
+
+        .review-card-item {
+            background: #F8FAFC;
+            border: 1px solid var(--paynext-border);
+            border-radius: 16px;
+            padding: 18px 20px;
+            margin-bottom: 14px;
+        }
+        body.dark-mode .review-card-item { background: #1A2333; }
+
+        .rating-bar-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--paynext-text-muted);
+            margin-bottom: 6px;
+        }
+        .rating-bar-track { flex: 1; height: 8px; background: #E2E8F0; border-radius: 999px; overflow: hidden; }
+        .rating-bar-fill { height: 100%; background: linear-gradient(90deg, #F59E0B, #FBBF24); border-radius: 999px; }
+
+        @media print {
+            body { padding: 0; background: #FFFFFF; }
+            .neo-nav, .floating-bottom-nav, .portal-footer, .btn-report-pill, .rep-export-actions, .auth-modal-backdrop { display: none !important; }
+            .report-header-card, .bi-chart-card, .rep-kpi-box { box-shadow: none !important; page-break-inside: avoid; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="portal-wrapper">
+
+        <!-- ==============================================================================
+             1. TOP NAVIGATION (CẤU TRÚC PHÂN TÁCH TỪNG MỤC RÕ RÀNG)
+        ============================================================================== -->
+        <header class="neo-nav">
+            <a href="#tab-intro" class="brand-logo" onclick="switchTab('tab-intro', event)">
+                <div class="brand-icon">⚡</div>
+                <div class="brand-text">
+                    <h1>HOÀNG KIM HUỆ</h1>
+                    <span>Data Analyst &amp; Business Intelligence</span>
+                </div>
+            </a>
+
+            <nav class="neo-nav-links">
+                <button class="neo-tab-btn active" onclick="switchTab('tab-intro', event)">🏠 Giới Thiệu</button>
+                <button class="neo-tab-btn" onclick="switchTab('tab-step1', event)">📤 Bước 1: Gửi Dữ Liệu</button>
+                <button class="neo-tab-btn" onclick="switchTab('tab-step23', event)">🧹 Bước 2-3: Làm Sạch</button>
+                <button class="neo-tab-btn" onclick="switchTab('tab-step4', event)">📊 Bước 4: Dashboard KPI</button>
+                <button class="neo-tab-btn" onclick="switchTab('tab-step5', event)">📑 Bước 5: Bảng Dữ Liệu</button>
+                <button class="neo-tab-btn" onclick="switchTab('tab-copilot', event)">🤖 AI Copilot</button>
+                <button class="neo-tab-btn" onclick="switchTab('tab-export', event)">📈 Báo Cáo Cuối Cùng</button>
+                <button class="neo-tab-btn" onclick="switchTab('tab-feedback', event)">⭐ Đánh Giá</button>
+            </nav>
+
+            <div id="authNavArea" style="display:flex; align-items:center; gap:8px;">
+                <a href="login.html" class="btn-neo-primary" style="padding:7px 16px; font-size:12.5px;">🔐 Đăng Nhập</a>
+            </div>
+        </header>
+
+        <!-- ==============================================================================
+             MỤC 1: 🏠 TRANG CHỦ & GIỚI THIỆU (LANDING & SPECIALIST PORTFOLIO)
+        ============================================================================== -->
+        <div id="tab-intro" class="tab-pane active">
+
+            <!-- Hero Banner -->
+            <section class="neo-hero-container">
+                <div>
+                    <div class="tag-pill yellow" style="margin-bottom:12px; font-weight:900;">✦ HOÀNG KIM HUỆ · DATA BI PLATFORM ✦</div>
+                    <h2 class="hero-title">Biến Dữ Liệu Thô Thành Báo Cáo Rõ Ràng</h2>
+                    <p class="hero-desc">
+                        Gửi file vào — AI Agent tự động làm sạch, lập kế hoạch sinh mã, chạy Sandbox an toàn và xuất Dashboard &amp; Báo cáo ngay. Đơn giản, minh bạch và chính xác 100%.
+                    </p>
+                    <div class="hero-buttons">
+                        <button class="btn-neo-primary" onclick="switchTab('tab-step1', event)">📤 Bắt Đầu Gửi Dữ Liệu Ngay</button>
+                        <button class="btn-neo-secondary" onclick="loadSampleDataset()">⚡ Nạp Thử Bộ Dữ Liệu Mẫu</button>
+                        <button class="btn-neo-secondary"  onclick="switchTab('tab-step4', event)">📊 Xem Dashboard Phân Tích</button>
+                    </div>
+                </div>
+
+                <!-- Hero Interactive Audio/Terminal Widget -->
+                <div class="hero-card-widget">
+                    <div class="player-badge-float">✦ LIVE AI AGENT ✦</div>
+                    <div class="hero-terminal" id="simTerminal">
+[HỆ THỐNG PHÂN TÍCH HOÀNG KIM HUỆ KHỞI ĐỘNG]
+- Sẵn sàng tiếp nhận: CSV, Excel (.xlsx, .xls), JSON
+- Sandbox Docker/E2B với cơ chế Self-Reflection tự sửa lỗi
+- Tích hợp Gemini 1.5 Flash Copilot & Session Memory
+- Bấm nút bên dưới để mô phỏng quy trình 5 bước!
+                    </div>
+
+                    <div class="player-controls-wrap">
+                        <button class="btn-play-circle" onclick="togglePlayerWidget()">▶</button>
+                        <div style="flex-grow:1;">
+                            <div class="progress-bar-neo">
+                                <div class="progress-fill"></div>
+                            </div>
+                            <div style="display:flex; justify-content:space-between;">
+                                <span class="time-text">02:45 / 05:00</span>
+                                <span class="time-text" style="color:#7C3AED; font-weight:900;">5-STEP PIPELINE ACTIVE</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Counter Ribbon -->
+            <div class="neo-counter-ribbon">
+                <div class="ribbon-stat-item">
+                    <h3 id="stat_leads_num">0 Bản Ghi</h3>
+                    <p id="stat_leads_sub">Chờ nạp tệp phân tích...</p>
+                </div>
+                <div class="ribbon-stat-item">
+                    <h3 id="stat_stores_num">0 Trường Dữ Liệu</h3>
+                    <p id="stat_stores_sub">Trích xuất Metadata tự động</p>
+                </div>
+                <div class="ribbon-stat-item">
+                    <h3 id="stat_trans_num">5 Bước Tự Động</h3>
+                    <p>Khép kín từ Upload đến Chatbot</p>
+                </div>
+            </div>
+
+            <!-- Roadmap 4 Bước Nhanh -->
+            <h3 style="font-family:var(--font-heading); font-size:22px; font-weight:900; margin-bottom:14px; text-align:center;">
+                🚀 Quy Trình Tiếp Cận Nhanh 4 Bước Chuẩn BI
+            </h3>
+            <div class="roadmap-grid-4">
+                <div class="roadmap-card" onclick="switchTab('tab-step1', event)">
+                    <div class="roadmap-num">1</div>
+                    <h4>Kết Nối Dữ Liệu</h4>
+                    <p>Chọn File Excel, CSV hoặc JSON. Tự động trích xuất Metadata 5-10 dòng.</p>
+                    <span class="action-link">Vào Bước 1 · Gửi file →</span>
+                </div>
+
+                <div class="roadmap-card" onclick="switchTab('tab-step23', event)">
+                    <div class="roadmap-num">2</div>
+                    <h4>Làm Sạch &amp; Chuẩn Hóa</h4>
+                    <p>Khử trùng lặp, xử lý ô trống, chuẩn hóa định dạng số &amp; văn bản trực tiếp.</p>
+                    <span class="action-link">Xem dữ liệu đã làm sạch →</span>
+                </div>
+
+                <div class="roadmap-card" onclick="switchTab('tab-step23', event)">
+                    <div class="roadmap-num">3</div>
+                    <h4>Kiểm Định Chất Lượng</h4>
+                    <p>Tự động kiểm tra toàn vẹn dữ liệu &amp; sẵn sàng chuyển sang phân tích KPI.</p>
+                    <span class="action-link">Xem nhật ký kiểm định →</span>
+                </div>
+
+                <div class="roadmap-card" onclick="switchTab('tab-step4', event)">
+                    <div class="roadmap-num">4</div>
+                    <h4>Dashboard &amp; Báo Cáo</h4>
+                    <p>Biểu đồ trực quan, phát hiện bất thường và nhận định kinh doanh.</p>
+                    <span class="action-link">Xem kết quả Dashboard →</span>
+                </div>
+            </div>
+
+            <!-- Specialist Profile Card (Hệt như Hà Thuỳ Dương nhưng mang tên Hoàng Kim Huệ) -->
+            <div class="specialist-profile-card">
+                <div class="profile-avatar-box">👑</div>
+                <div>
+                    <div class="tag-pill purple" style="margin-bottom:6px;">CHUYÊN GIA DATA ANALYST &amp; BUSINESS INTELLIGENCE</div>
+                    <h3 style="font-family:var(--font-heading); font-size:26px; font-weight:900; margin-bottom:8px;">Hoàng Kim Huệ</h3>
+                    <p style="font-size:14px; color:#475569; line-height:1.6; margin-bottom:14px;">
+                        Chuyên gia thiết kế hệ thống Business Intelligence và kiến trúc Web AI Agent tự động hóa phân tích dữ liệu. Cam kết mang đến trải nghiệm phân tích dữ liệu <b>ngắn gọn · dễ hiểu · dễ dùng</b>, giúp các cấp quản lý chuyển đổi dữ liệu thô sơ thành quyết định kinh doanh chuẩn xác.
+                    </p>
+                    <div style="display:flex; gap:10px; flex-wrap:wrap;">
+                        <span class="tag-pill">Python &amp; Pandas</span>
+                        <span class="tag-pill">Docker &amp; E2B Sandbox</span>
+                        <span class="tag-pill">SQL &amp; Data Warehousing</span>
+                        <span class="tag-pill">Power BI &amp; Generative UI</span>
+                        <span class="tag-pill yellow">Gemini 1.5 Flash Copilot</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 4 Feature Cards Grid -->
+            <h3 style="font-family:var(--font-heading); font-size:22px; font-weight:900; margin-bottom:14px; text-align:center;">
+                ⚡ 4 Trụ Cột Năng Lực Công Nghệ
+            </h3>
+            <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); gap:18px; margin-bottom:32px;">
+                <div class="neo-card" style="background:var(--paynext-card-bg);">
+                    <div style="font-size:32px; margin-bottom:10px;">🧹</div>
+                    <h4 style="font-size:17px; font-weight:900; margin-bottom:6px;">01 · Làm Sạch Thông Minh</h4>
+                    <p style="font-size:13px; color:#475569;">Xóa trùng lặp, chuẩn hóa ngày tháng &amp; số tiền, cảnh báo ô trống và loại bỏ giá trị ngoại lai.</p>
+                </div>
+                <div class="neo-card" style="background:var(--paynext-card-bg);">
+                    <div style="font-size:32px; margin-bottom:10px;">📊</div>
+                    <h4 style="font-size:17px; font-weight:900; margin-bottom:6px;">02 · Phân Tích Đa Chiều</h4>
+                    <p style="font-size:13px; color:#475569;">Tính toán KPI tức thì (Tổng, Trung bình, Độ lệch chuẩn), phân vị sức khỏe và vẽ biểu đồ tự động.</p>
+                </div>
+                <div class="neo-card" style="background:var(--paynext-card-bg);">
+                    <div style="font-size:32px; margin-bottom:10px;">📂</div>
+                    <h4 style="font-size:17px; font-weight:900; margin-bottom:6px;">03 · Đọc Mọi Định Dạng</h4>
+                    <p style="font-size:13px; color:#475569;">Hỗ trợ Excel (.xlsx, .xls), CSV, JSON, TXT. Tự động nhận diện cấu trúc mà không cần cấu hình.</p>
+                </div>
+                <div class="neo-card" style="background:var(--paynext-card-bg);">
+                    <div style="font-size:32px; margin-bottom:10px;">📄</div>
+                    <h4 style="font-size:17px; font-weight:900; margin-bottom:6px;">04 · Xuất Báo Cáo Chuẩn</h4>
+                    <p style="font-size:13px; color:#475569;">Xuất file Excel sạch, Excel tổng hợp biểu đồ, Dashboard HTML độc lập và báo cáo Word.</p>
+                </div>
+            </div>
+
+            <!-- Spotlight Card -->
+            <div class="hottest-show-card">
+                <div class="hottest-show-media">
+                    <div class="badge-number-one">#1 BÁO ĐỘNG</div>
+                    <div style="font-size:54px;">🚨</div>
+                </div>
+                <div class="spotlight-info">
+                    <h3>Chưa Có Điểm Nóng Phân Tích Cần Chú Ý</h3>
+                    <p>Kéo thả tệp dữ liệu bất kỳ hoặc nhấp <b>"⚡ Nạp Bộ Dữ Liệu Mẫu"</b> để AI Agent của <b>Hoàng Kim Huệ</b> tự động nhận diện thực thể có rủi ro cao nhất hoặc tăng trưởng đột biến nhất.</p>
+                    <div class="spotlight-meta">
+                        <span>👤 Chuyên gia giám sát: Hoàng Kim Huệ</span>
+                        <span>⏱️ Trạng thái: Sẵn sàng phân tích</span>
+                    </div>
+                    <div>
+                        <span class="tag-pill yellow">Chờ Nạp Tệp</span>
+                    </div>
+                </div>
+                <div>
+                    <button class="btn-spotlight-play" onclick="switchTab('tab-step4', event)" title="Xem chi tiết tại Dashboard">👁️</button>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- ==============================================================================
+             MỤC 2: 📤 BƯỚC 1: TIẾP NHẬN DỮ LIỆU & YÊU CẦU (USER UPLOAD & QUERY)
+        ============================================================================== -->
+        <div id="tab-step1" class="tab-pane">
+            <div class="step-container-box user-step">
+                <span class="step-badge-tag" style="background:#EDE9FE; color:#5B21B6;">BƯỚC 1: TIẾP NHẬN DỮ LIỆU &amp; YÊU CẦU (NGƯỜI DÙNG &amp; GIAO DIỆN)</span>
+                <h3 style="font-family:var(--font-heading); font-size:22px; font-weight:900; margin-bottom:6px;">
+                    1. Gửi Dữ Liệu &amp; Nhập Mục Tiêu Phân Tích
+                </h3>
+                <p style="font-size:13.5px; color:#475569; margin-bottom:14px;">
+                    Hệ thống sẽ tự động <b>trích xuất metadata và lấy mẫu 5-10 dòng</b> làm ngữ cảnh cho AI mà không cần tải toàn bộ file nặng, vừa an toàn vừa tối ưu chi phí xử lý.
+                </p>
+
+                <!-- Query / Goal Input -->
+                <div style="display:flex; gap:10px; margin-bottom:14px; flex-wrap:wrap;">
+                    <input type="text" id="userGoalInput" class="neo-input" placeholder="💬 Nhập câu hỏi hoặc mục tiêu phân tích (VD: Tìm thực thể tăng trưởng cao nhất và phát hiện rủi ro)..." style="flex-grow:1; min-width:280px;">
+                    <button class="btn-neo-primary" onclick="runFull5StepWorkflow()">🚀 Chạy Phân Tích 5 Bước</button>
+                </div>
+
+                <!-- Dropzone -->
+                <div class="upload-dropzone"
+                     ondragover="event.preventDefault(); this.style.background='#DBEAFE';"
+                     ondragleave="this.style.background='#FFF';"
+                     ondrop="event.preventDefault(); this.style.background='#FFF'; handleUniversalUpload(event.dataTransfer.files[0]);">
+                    <div style="font-size:42px; margin-bottom:6px;">📥</div>
+                    <h4 style="font-size:17px; font-weight:900; margin-bottom:4px;">KÉO THẢ TỆP (.CSV, .XLSX, .XLS, .JSON, .TXT) VÀO ĐÂY</h4>
+                    <p style="font-size:13px; color:#64748B; margin-bottom:16px;">Hỗ trợ mọi định dạng bảng tính thô sơ. Hệ thống tự động làm sạch và khám phá cấu trúc.</p>
+                    <div style="display:flex; justify-content:center; gap:10px; flex-wrap:wrap;">
+                        <input type="file" id="studioFileInput" accept=".csv,.xlsx,.xls,.json,.txt" style="display:none;" onchange="handleUniversalUpload(this.files[0])">
+                        <button class="btn-neo-primary" onclick="document.getElementById('studioFileInput').click()">📁 Chọn Tệp Trên Máy Tính</button>
+                        <button class="btn-neo-secondary"  onclick="loadSampleDataset()">⚡ Nạp Bộ Dữ Liệu Mẫu</button>
+                        <button class="tag-pill red" style="cursor:pointer; padding:10px 16px; font-weight:800;" onclick="clearAllData()">🗑️ Xóa Dữ Liệu</button>
+                    </div>
+                </div>
+
+                <!-- Metadata Preview Box -->
+                <div id="step1MetadataBox" style="display:none; margin-top:16px;"></div>
+
+                <!-- Navigation to next step -->
+                <div style="margin-top:20px; text-align:right;">
+                    <button class="btn-neo-secondary" onclick="switchTab('tab-step23', event)">Chuyển sang Bước 2 &amp; 3: Dữ Liệu Đã Làm Sạch →</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==============================================================================
+             MỤC 3: 🧹 BƯỚC 2 & 3: LÀM SẠCH DỮ LIỆU & KIỂM ĐỊNH CHẤT LƯỢNG (KHÔNG HIỆN CODE)
+        ============================================================================== -->
+        <div id="tab-step23" class="tab-pane">
+            <!-- BƯỚC 2: HIỂN THỊ DỮ LIỆU ĐÃ ĐƯỢC LÀM SẠCH + LÀM SẠCH THEO YÊU CẦU -->
+            <div class="step-container-box ai-step">
+                <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:12px; margin-bottom:14px;">
+                    <div>
+                        <span class="step-badge-tag" style="background:#DCFCE7; color:#15803D;">BƯỚC 2: LÀM SẠCH DỮ LIỆU THEO YÊU CẦU &amp; CHUẨN HÓA</span>
+                        <h3 style="font-family:var(--font-heading); font-size:21px; font-weight:900; margin-bottom:4px;">
+                            Tùy Chỉnh Làm Sạch &amp; Bảng Dữ Liệu Sạch
+                        </h3>
+                        <p style="font-size:13px; color:var(--paynext-text-muted);">
+                            Chọn quy tắc hoặc gõ yêu cầu làm sạch riêng của bạn — hệ thống xử lý tức thì và đồng bộ sang Dashboard &amp; Báo Cáo Cuối Cùng.
+                        </p>
+                    </div>
+                    <input type="text" id="step2CleanSearch" class="neo-input" placeholder="🔍 Lọc trong dữ liệu sạch..." style="width:240px; padding:8px 14px;" oninput="renderStep2CleanedTable()">
+                </div>
+
+                <!-- KHỐI LÀM SẠCH THEO YÊU CẦU CỦA KHÁCH HÀNG -->
+                <div class="custom-clean-panel">
+                    <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; margin-bottom:12px;">
+                        <h4 style="font-size:15px; font-weight:800; color:var(--paynext-text-main);">🛠️ Yêu Cầu Làm Sạch Dữ Liệu Của Khách Hàng</h4>
+                        <span class="tag-pill purple" style="font-size:11.5px;">Tự động cập nhật Bước 4, 5 &amp; Báo cáo</span>
+                    </div>
+
+                    <!-- Nhập yêu cầu tự nhiên của khách -->
+                    <div style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom:10px;">
+                        <input type="text" id="customCleanPrompt" class="neo-input" style="flex:1; min-width:260px; background:var(--paynext-card-bg);" placeholder="💬 Gõ yêu cầu (VD: Xóa dòng 1, 3; xóa đơn hủy; xóa dòng chứa Processing; xóa doanh thu < 200; xóa cột region)..." onkeydown="if(event.key==='Enter') applyCustomCleaning()">
+                        <button type="button" class="btn-neo-primary" onclick="applyCustomCleaning()">✨ Áp Dụng Làm Sạch</button>
+                        <button type="button" class="btn-neo-secondary" onclick="resetCustomCleaning()">🔄 Khôi Phục Mặc Định</button>
+                    </div>
+
+                    <!-- Gợi ý yêu cầu nhanh -->
+                    <div style="display:flex; gap:6px; flex-wrap:wrap; margin-bottom:14px;">
+                        <span style="font-size:11.5px; font-weight:700; color:var(--paynext-text-muted); align-self:center; margin-right:4px;">Gợi ý nhanh:</span>
+                        <button type="button" class="aspect-chip" onclick="useQuickCleanPrompt('Xóa dòng 1')">🗑️ Xóa dòng 1</button>
+                        <button type="button" class="aspect-chip" onclick="useQuickCleanPrompt('Xóa các đơn bị hủy')">🚫 Xóa đơn bị hủy</button>
+                        <button type="button" class="aspect-chip" onclick="useQuickCleanPrompt('Xóa dòng có ô trống')">🧹 Xóa dòng có ô trống</button>
+                        <button type="button" class="aspect-chip" onclick="useQuickCleanPrompt('Loại bỏ giá trị ngoại lai')">📉 Loại bỏ ngoại lai (IQR)</button>
+                        <button type="button" class="aspect-chip" onclick="useQuickCleanPrompt('Xóa dòng có doanh thu < 200')">💰 Xóa doanh thu &lt; 200</button>
+                    </div>
+
+                    <!-- Tùy chọn quy tắc bằng Checkbox & Dropdown -->
+                    <div class="clean-options-grid">
+                        <label class="clean-check-item">
+                            <input type="checkbox" id="cleanOptDedup" checked onchange="applyCustomCleaning()">
+                            <span>Xóa dòng trùng lặp</span>
+                        </label>
+                        <label class="clean-check-item">
+                            <input type="checkbox" id="cleanOptTrim" checked onchange="applyCustomCleaning()">
+                            <span>Cắt khoảng trắng thừa</span>
+                        </label>
+                        <label class="clean-check-item">
+                            <input type="checkbox" id="cleanOptDropCanceled" onchange="applyCustomCleaning()">
+                            <span>Loại bỏ đơn bị hủy (Canceled / Hủy)</span>
+                        </label>
+                        <label class="clean-check-item">
+                            <input type="checkbox" id="cleanOptDropNonPositive" onchange="applyCustomCleaning()">
+                            <span>Loại bỏ chỉ số chính &le; 0</span>
+                        </label>
+                        <label class="clean-check-item">
+                            <input type="checkbox" id="cleanOptDropOutliers" onchange="applyCustomCleaning()">
+                            <span>Loại bỏ ngoại lai thống kê (IQR)</span>
+                        </label>
+                    </div>
+
+                    <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(230px, 1fr)); gap:12px;">
+                        <div>
+                            <label style="display:block; font-size:11.5px; font-weight:700; color:var(--paynext-text-muted); margin-bottom:5px;">Cách xử lý ô trống (Null / Missing):</label>
+                            <select id="cleanOptMissing" class="neo-select" style="width:100%; background:var(--paynext-card-bg); padding:9px 12px;" onchange="applyCustomCleaning()">
+                                <option value="default">Điền giá trị mặc định (0 / "Không xác định")</option>
+                                <option value="mean">Điền giá trị trung bình (Mean) cho cột số</option>
+                                <option value="drop">Xóa bỏ hoàn toàn dòng chứa ô trống</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label style="display:block; font-size:11.5px; font-weight:700; color:var(--paynext-text-muted); margin-bottom:5px;">Chuẩn hóa chữ viết (Cột văn bản):</label>
+                            <select id="cleanOptCase" class="neo-select" style="width:100%; background:var(--paynext-card-bg); padding:9px 12px;" onchange="applyCustomCleaning()">
+                                <option value="keep">Giữ nguyên chữ hoa/thường gốc</option>
+                                <option value="title">Viết Hoa Chữ Cái Đầu Mỗi Từ</option>
+                                <option value="upper">CHUYỂN THÀNH CHỮ IN HOA</option>
+                                <option value="lower">chuyển thành chữ thường</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Hiển thị các quy tắc đang được áp dụng -->
+                    <div id="cleanAppliedRulesBox" class="clean-applied-tags"></div>
+                </div>
+
+                <!-- 4 Cleaning Summary Cards -->
+                <div class="clean-summary-grid">
+                    <div class="clean-stat-card">
+                        <div class="clean-stat-label">Tổng Dòng Đầu Vào</div>
+                        <div class="clean-stat-val" id="cleanRawCount">0</div>
+                    </div>
+                    <div class="clean-stat-card">
+                        <div class="clean-stat-label">Đã Loại Bỏ (Trùng / Lọc)</div>
+                        <div class="clean-stat-val" id="cleanDupCount" style="color:#D97706;">0</div>
+                    </div>
+                    <div class="clean-stat-card">
+                        <div class="clean-stat-label">Ô Đã Chuẩn Hóa / Sửa Lỗi</div>
+                        <div class="clean-stat-val" id="cleanFixedCount" style="color:#2563EB;">0</div>
+                    </div>
+                    <div class="clean-stat-card">
+                        <div class="clean-stat-label">Dữ Liệu Sạch Đạt Chuẩn</div>
+                        <div class="clean-stat-val" id="cleanFinalCount" style="color:#16A34A;">0</div>
+                    </div>
+                </div>
+
+                <!-- Cleaned Data Table -->
+                <div class="table-container-neo" style="max-height:420px; overflow-y:auto;">
+                    <table class="neo-table">
+                        <thead id="step2CleanedHead">
+                            <tr><th>#</th><th>Trạng Thái Làm Sạch</th><th>Thông Báo</th></tr>
+                        </thead>
+                        <tbody id="step2CleanedBody">
+                            <tr><td colspan="3" style="text-align:center; padding:32px; color:#64748B;">Chưa có dữ liệu. Vui lòng gửi tệp tại Bước 1 để hệ thống tự động làm sạch và hiển thị kết quả tại đây.</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- BƯỚC 3: KIỂM ĐỊNH CHẤT LƯỢNG & NHẬT KÝ XỬ LÝ (ĐỒNG BỘ MÀU SÁNG PAYNEXT) -->
+            <div class="step-container-box ai-step">
+                <span class="step-badge-tag" style="background:#EDE9FE; color:#5B21B6;">BƯỚC 3: KIỂM ĐỊNH CHẤT LƯỢNG &amp; TỰ ĐỘNG SỬA LỖI</span>
+                <h3 style="font-family:var(--font-heading); font-size:18px; font-weight:900; margin-bottom:6px;">Nhật Ký Kiểm Tra Toàn Vẹn Dữ Liệu</h3>
+                <p style="font-size:12.5px; color:var(--paynext-text-muted); margin-bottom:14px;">Ghi nhận chi tiết từng bước làm sạch, đối soát kiểu dữ liệu và xác nhận sẵn sàng dựng Dashboard KPI:</p>
+                <div class="step3-validation-box" id="step3SandboxTerminal">
+                    <div class="step3-log-row">
+                        <span class="step3-log-badge info">SẴN SÀNG</span>
+                        <span>Đang chờ nạp tệp dữ liệu từ <b>Bước 1</b> để tiến hành kiểm định tự động...</span>
+                    </div>
+                </div>
+            </div>
+
+            <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+                <button class="btn-neo-secondary" onclick="switchTab('tab-step1', event)">← Quay lại Bước 1</button>
+                <button class="btn-neo-primary" onclick="switchTab('tab-step4', event)">Chuyển sang Bước 4: Dashboard KPI →</button>
+            </div>
+        </div>
+
+        <!-- ==============================================================================
+             MỤC 4: 📊 BƯỚC 4: DASHBOARD KPI & TRỰC QUAN HÓA ĐẦY ĐỦ (AI ANALYTICS ENGINE)
+        ============================================================================== -->
+        <div id="tab-step4" class="tab-pane">
+            <div class="step-container-box ai-step">
+                <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:14px; margin-bottom:18px;">
+                    <div>
+                        <span class="step-badge-tag" style="background:#EDE9FE; color:#5B21B6;">BƯỚC 4: DASHBOARD TRỰC QUAN HÓA &amp; PHÂN TÍCH KPI</span>
+                        <h3 style="font-family:var(--font-heading); font-size:23px; font-weight:900; margin-bottom:4px;">
+                            4. Dashboard Phân Tích Đa Chiều &amp; Nhận Định Kinh Doanh
+                        </h3>
+                        <p style="font-size:13.5px; color:var(--paynext-text-muted);">
+                            Tự động dựng hệ thống biểu đồ phân tích từ dữ liệu sạch ở Bước 2–3. Bạn có thể đổi cột chỉ số và chiều phân nhóm ngay bên dưới.
+                        </p>
+                    </div>
+                    <!-- Interactive Metric & Group-By Selectors -->
+                    <div id="step4ControlsBar" style="display:flex; gap:10px; flex-wrap:wrap; align-items:center;">
+                        <select id="step4MetricSelect" class="neo-select" style="padding:8px 14px; font-size:12.5px;" onchange="onStep4ControlChange()" title="Chọn chỉ số đo lường">
+                            <option value="">Chỉ số chính (tự động)</option>
+                        </select>
+                        <select id="step4GroupSelect" class="neo-select" style="padding:8px 14px; font-size:12.5px;" onchange="onStep4ControlChange()" title="Chọn cột phân nhóm">
+                            <option value="">Nhóm phân loại (tự động)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- 5 KPI Tiles -->
+                <div class="kpi-grid-5">
+                    <div class="kpi-tile purple">
+                        <div class="kpi-tile-label">QUY MÔ BẢN GHI SẠCH</div>
+                        <div class="kpi-tile-value" id="kpi_total_rows">0 Dòng</div>
+                    </div>
+                    <div class="kpi-tile green">
+                        <div class="kpi-tile-label">SỐ TRƯỜNG DỮ LIỆU</div>
+                        <div class="kpi-tile-value" id="kpi_total_cols">0 Cột</div>
+                    </div>
+                    <div class="kpi-tile yellow">
+                        <div class="kpi-tile-label" id="kpi_sum_label">TỔNG CHỈ SỐ CHÍNH</div>
+                        <div class="kpi-tile-value" id="kpi_total_sum">-</div>
+                    </div>
+                    <div class="kpi-tile cyan">
+                        <div class="kpi-tile-label" id="kpi_avg_label">GIÁ TRỊ BÌNH QUÂN</div>
+                        <div class="kpi-tile-value" id="kpi_average_val">-</div>
+                    </div>
+                    <div class="kpi-tile red">
+                        <div class="kpi-tile-label">CẢNH BÁO BẤT THƯỜNG</div>
+                        <div class="kpi-tile-value" id="kpi_anomalies_count" style="color:#DC2626;">0 Điểm Nóng</div>
+                    </div>
+                </div>
+
+                <!-- Natural Insights Summary Box -->
+                <div id="step4InsightsBox"></div>
+
+                <!-- Row 1 of Dashboard Charts: Category Column Chart + Donut Health/Status Chart -->
+                <div class="charts-row-2" style="margin-bottom:18px;">
+                    <div class="neo-card" id="chartBoxCategory" style="margin-bottom:0;"></div>
+                    <div class="neo-card" id="chartBoxPerformance" style="margin-bottom:0;"></div>
+                </div>
+
+                <!-- Row 2 of Dashboard Charts: Top Entities Ranking + Distribution Histogram & Stats -->
+                <div class="charts-row-2" style="margin-bottom:18px;">
+                    <div class="neo-card" id="chartBoxTopEntities" style="margin-bottom:0;"></div>
+                    <div class="neo-card" id="chartBoxDistribution" style="margin-bottom:0;"></div>
+                </div>
+
+                <!-- Anomaly Spotlight Box -->
+                <div id="step4AnomalyListBox" style="margin-bottom:18px;"></div>
+
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-top:20px; flex-wrap:wrap; gap:10px;">
+                    <button class="btn-neo-secondary" onclick="switchTab('tab-step23', event)">← Quay lại Bước 2-3: Làm Sạch</button>
+                    <div style="display:flex; gap:10px; flex-wrap:wrap;">
+                        <button class="btn-neo-secondary" onclick="switchTab('tab-step5', event)">📑 Bước 5: Bảng Dữ Liệu →</button>
+                        <button class="btn-neo-primary" onclick="switchTab('tab-export', event)">📈 Mở Báo Cáo Cuối Cùng →</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==============================================================================
+             MỤC 5: 📑 BƯỚC 5: BẢNG DỮ LIỆU TƯƠNG TÁC (INTERACTIVE TABLE & EXPORT)
+        ============================================================================== -->
+        <div id="tab-step5" class="tab-pane">
+            <div class="step-container-box user-step">
+                <span class="step-badge-tag" style="background:#EDE9FE; color:#5B21B6;">BƯỚC 5: HIỂN THỊ &amp; TƯƠNG TÁC (GIAO DIỆN &amp; NGƯỜI DÙNG)</span>
+                <h3 style="font-family:var(--font-heading); font-size:22px; font-weight:900; margin-bottom:6px;">
+                    5. Bảng Dữ Liệu Động Tương Tác &amp; Bộ Lọc Đa Chiều
+                </h3>
+                <p style="font-size:13.5px; color:#475569; margin-bottom:14px;">
+                    Lọc, tìm kiếm, sắp xếp và lưu lịch sử phiên làm việc (Session Memory) để bạn hỏi đáp nối tiếp qua Chatbox hoặc tải báo cáo.
+                </p>
+
+                <!-- Filter Controls -->
+                <div class="filter-bar-neo">
+                    <input type="text" id="searchQuery" class="neo-input" placeholder="🔍 Tìm kiếm trong toàn bộ các cột..." style="flex-grow:1; min-width:240px;" oninput="renderStudioDashboard()">
+                    <select id="categoryFilter" class="neo-select" style="min-width:220px;" onchange="renderStudioDashboard()">
+                        <option value="ALL">Tất cả phân loại</option>
+                    </select>
+                    <button class="btn-neo-secondary" style="padding:10px 16px; font-size:13px;" onclick="document.getElementById('searchQuery').value=''; document.getElementById('categoryFilter').value='ALL'; renderStudioDashboard();">🔄 Đặt Lại</button>
+                    
+                    <div style="margin-left:auto; display:flex; gap:8px;">
+                        <button class="btn-neo-primary" style="padding:8px 14px; font-size:12.5px;" onclick="exportDatasetCSV()">📥 Xuất Tệp CSV</button>
+                        <button class="btn-neo-secondary" style="padding:8px 14px; font-size:12.5px;" onclick="switchTab('tab-copilot', event)">💬 Hỏi AI Copilot</button>
+                    </div>
+                </div>
+
+                <!-- Interactive Table -->
+                <div class="table-container-neo">
+                    <table class="neo-table">
+                        <thead id="dynamicTableHead">
+                            <tr><th>#</th><th>Thông Báo</th></tr>
+                        </thead>
+                        <tbody id="dynamicTableBody">
+                            <tr>
+                                <td colspan="2" style="text-align:center; padding:30px;">Chưa có dữ liệu. Vui lòng nạp tệp tại Bước 1.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-top:20px;">
+                    <button class="btn-neo-secondary" onclick="switchTab('tab-step4', event)">← Quay lại Bước 4: Dashboard</button>
+                    <div style="display:flex; gap:10px; flex-wrap:wrap;"><button class="btn-neo-secondary" onclick="switchTab('tab-copilot', event)">🤖 Hỏi AI Copilot</button><button class="btn-neo-primary" onclick="switchTab('tab-export', event)">📈 Mở Báo Cáo Cuối Cùng →</button></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==============================================================================
+             MỤC 7: 🤖 AI COPILOT TRỰC TUYẾN (SESSION MEMORY CHAT)
+        ============================================================================== -->
+        <div id="tab-copilot" class="tab-pane">
+            <div class="chat-container-neo">
+                <div class="chat-header">
+                    <div style="display:flex; align-items:center; gap:10px;">
+                        <span style="font-size:22px;">👑</span>
+                        <div>
+                            <h3 style="font-size:15px; font-weight:900;">HOÀNG KIM HUỆ COPILOT</h3>
+                            <span style="font-size:11px; opacity:0.85;">Powered by Gemini 1.5 Flash • Session Memory Active</span>
+                        </div>
+                    </div>
+                    <span class="tag-pill yellow" style="font-size:11px;">✦ BƯỚC 5: SESSION MEMORY</span>
+                </div>
+
+                <div class="chat-body" id="aiChatBox">
+                    <div class="ai-msg bot" style="align-self:flex-start; max-width:85%; background:#F3E8FF; border:1px solid #DDD6FE; box-shadow:0 2px 8px rgba(109,40,217,0.06); border-radius:12px; padding:12px 16px; font-size:13px; line-height:1.5;">
+                        <b>👑 Hoàng Kim Huệ Copilot:</b><br>
+                        Xin chào! Tôi là Trợ Lý AI của <b>Hoàng Kim Huệ</b>. Tôi vận hành tại <b>Bước 5 (Tương tác &amp; Session Memory)</b>. Tôi đã được đồng bộ ngữ cảnh dữ liệu từ các bước 1-4. Bạn có thể hỏi tôi bất kỳ câu hỏi nối tiếp nào về dữ liệu, nguyên nhân bất thường hoặc giải pháp kinh doanh!
+                    </div>
+                </div>
+
+                <!-- Quick Prompts -->
+                <div style="padding:8px 20px; background:#F8FAFC; border-top:1px solid #E2E8F0; display:flex; gap:8px; overflow-x:auto;">
+                    <button class="tag-pill" style="cursor:pointer; white-space:nowrap;" onclick="askPreset('Tóm tắt kết quả phân tích ở Bước 4?')">📊 Tóm tắt Bước 4</button>
+                    <button class="tag-pill red" style="cursor:pointer; white-space:nowrap;" onclick="askPreset('Điểm nóng bất thường nhất là gì và nguyên nhân?')">🚨 Phân tích điểm nóng</button>
+                    <button class="tag-pill purple" style="cursor:pointer; white-space:nowrap;" onclick="askPreset('Đề xuất 3 hành động cụ thể để cải thiện chỉ số?')">💡 Đề xuất hành động</button>
+                    <button class="tag-pill" style="cursor:pointer; white-space:nowrap;" onclick="askPreset('Giải thích quy trình tự sửa lỗi (Self-Reflection) ở Bước 3?')">⚙️ Giải thích Bước 3</button>
+                </div>
+
+                <div class="chat-footer">
+                    <input type="text" id="aiUserInput" class="neo-input" placeholder="Nhập câu hỏi nối tiếp với AI Copilot (Session Memory đang lưu)..." style="flex-grow:1;" onkeydown="if(event.key==='Enter') sendAiQuestion()">
+                    <button class="btn-neo-primary" style="padding:10px 20px;" onclick="sendAiQuestion()">Gửi Câu Hỏi ✦</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==============================================================================
+             MỤC 8: 📄 XUẤT BÁO CÁO & TÀI LIỆU
+        ============================================================================== -->
+        <div id="tab-export" class="tab-pane">
+
+            <!-- Empty state when no file is uploaded yet -->
+            <div id="repEmptyState" class="report-header-card" style="text-align:center; padding:52px 24px;">
+                <div style="font-size:48px; margin-bottom:12px;">📊</div>
+                <h3 style="font-size:22px; font-weight:800; margin-bottom:8px;">Chưa Có Dữ Liệu Để Xuất Báo Cáo Nghiệm Thu</h3>
+                <p style="font-size:14px; color:var(--paynext-text-muted); max-width:520px; margin:0 auto 22px;">
+                    Vui lòng tải tệp dữ liệu thực tế của bạn ở <b>Bước 1</b> (Excel, CSV, JSON) hoặc nạp bộ dữ liệu mẫu để hệ thống tự động tính toán và xuất Báo Cáo Kinh Doanh theo chuẩn điều hành.
+                </p>
+                <div style="display:flex; justify-content:center; gap:12px; flex-wrap:wrap;">
+                    <button class="btn-neo-primary" onclick="switchTab('tab-step1', event)">📤 Sang Bước 1: Gửi Dữ Liệu</button>
+                    <button class="btn-neo-secondary" onclick="loadSampleDataset(); switchTab('tab-export', event);">⚡ Nạp Thử Dữ Liệu Mẫu</button>
+                </div>
+            </div>
+
+            <!-- Main Executive BI Report (Exact 4-Image Layout, 100% Real Analyzed Data) -->
+            <div id="repMainContent" style="display:none;">
+                <div style="font-size:12.5px; font-weight:700; color:var(--paynext-text-muted); margin-bottom:10px;">Báo cáo đã nghiệm thu</div>
+
+                <!-- IMAGE 1: Header Card & Navy Total Revenue Hero -->
+                <section class="report-header-card">
+                    <div class="report-top-bar">
+                        <div class="report-brand-name">Hoàng Kim Huệ Insight<span style="color:#BE123C;">.</span></div>
+                        <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+                            <span class="badge-verified-blue">● Đã nghiệm thu</span>
+                            <button class="btn-report-pill" onclick="toggleReportTheme()">Sáng / tối</button>
+                            <button class="btn-report-pill" onclick="window.print()">In báo cáo ↗</button>
+                        </div>
+                    </div>
+
+                    <div class="report-title-hero-grid">
+                        <div>
+                            <h2 class="report-main-title">Báo cáo kinh doanh</h2>
+                            <p class="report-main-subtitle">Tổng hợp kết quả trong kỳ từ dữ liệu đã được làm sạch và kiểm duyệt.</p>
+                        </div>
+                        <div class="navy-hero-card">
+                            <div class="navy-hero-label">TỔNG DOANH THU TRONG KỲ</div>
+                            <div class="navy-hero-value" id="repHeroRevenue">-</div>
+                            <div class="navy-hero-meta" id="repHeroMeta">0 đơn được tính · 0 khách hàng</div>
+                        </div>
+                    </div>
+
+                    <div class="report-metadata-bar">
+                        <div>Nguồn dữ liệu<b id="repMetaFile">-</b></div>
+                        <div>Kỳ báo cáo<b id="repMetaPeriod">Đầu dữ liệu — Cuối dữ liệu</b></div>
+                        <div>Thời điểm xuất<b id="repMetaTime">-</b></div>
+                    </div>
+
+                    <div class="report-subtabs-row">
+                        <button class="report-subtab-btn active" onclick="switchReportSubTab('rep-all', this)">Tổng quan</button>
+                        <button class="report-subtab-btn" onclick="switchReportSubTab('rep-charts', this)">Biểu đồ</button>
+                        <button class="report-subtab-btn" onclick="switchReportSubTab('rep-ranking', this)">Xếp hạng</button>
+                        <button class="report-subtab-btn" onclick="switchReportSubTab('rep-recs', this)">Đề xuất</button>
+                    </div>
+                </section>
+
+                <!-- IMAGE 1: 4 KPI Cards -->
+                <section id="rep-sec-kpis" class="rep-kpi-grid">
+                    <div class="rep-kpi-box">
+                        <div class="rep-kpi-head"><span>Lợi nhuận ước tính</span><span class="rep-kpi-icon">↗</span></div>
+                        <div class="rep-kpi-val" id="repKpiProfit">-</div>
+                        <div class="rep-kpi-sub" id="repKpiProfitSub">Biên lợi nhuận 32% do người dùng chọn</div>
+                    </div>
+                    <div class="rep-kpi-box">
+                        <div class="rep-kpi-head"><span>Đơn hàng được tính</span><span class="rep-kpi-icon">▤</span></div>
+                        <div class="rep-kpi-val" id="repKpiOrders">0</div>
+                        <div class="rep-kpi-sub">Bao gồm toàn bộ bản ghi đã chuẩn hóa</div>
+                    </div>
+                    <div class="rep-kpi-box">
+                        <div class="rep-kpi-head"><span>Giá trị đơn trung bình</span><span class="rep-kpi-icon">◇</span></div>
+                        <div class="rep-kpi-val" id="repKpiAov">-</div>
+                        <div class="rep-kpi-sub">Doanh thu / số đơn được tính</div>
+                    </div>
+                    <div class="rep-kpi-box">
+                        <div class="rep-kpi-head"><span>Khách hàng duy nhất</span><span class="rep-kpi-icon">◎</span></div>
+                        <div class="rep-kpi-val" id="repKpiCustomers">0</div>
+                        <div class="rep-kpi-sub" id="repKpiCustomersSub">0% khách mua từ 2 đơn</div>
+                    </div>
+                </section>
+
+                <div class="report-tip-bar">
+                    Rê chuột hoặc dùng phím Tab để xem số liệu · Bấm vào biểu đồ để ghim thông tin.
+                </div>
+
+                <!-- IMAGES 2, 3, 4: Charts Section -->
+                <section id="rep-sec-charts">
+                    <!-- Line Chart: Nhịp doanh thu & lợi nhuận -->
+                    <div class="bi-chart-card">
+                        <div class="bi-chart-header">
+                            <div>
+                                <h3 class="bi-chart-title">Nhịp doanh thu &amp; lợi nhuận</h3>
+                                <div class="bi-chart-sub">Gom theo mốc trong kỳ đã nghiệm thu</div>
+                            </div>
+                            <div style="display:flex; gap:6px;">
+                                <button class="rep-line-pill active" onclick="setReportLineMode('both', this)">Cả hai</button>
+                                <button class="rep-line-pill" onclick="setReportLineMode('revenue', this)">Doanh thu</button>
+                                <button class="rep-line-pill" onclick="setReportLineMode('profit', this)">Lợi nhuận</button>
+                            </div>
+                        </div>
+                        <div class="chart-content-grid">
+                            <div id="repLineChartSvg"></div>
+                            <div class="ai-insight-callout-box">
+                                <div class="callout-header-tag">Nhận định</div>
+                                <div class="callout-body-text" id="repInsightLine">-</div>
+                            </div>
+                        </div>
+                        <div style="font-size:12px; color:var(--paynext-text-muted); margin-top:14px; padding-top:10px; border-top:1px solid var(--paynext-border);">
+                            Rê chuột lên từng điểm để so sánh · Hiển thị tối đa 24 mốc cuối kỳ; KPI tính trên toàn bộ kỳ.
+                        </div>
+                    </div>
+
+                    <!-- Donut Chart: Trạng thái đơn hàng -->
+                    <div class="bi-chart-card">
+                        <div class="bi-chart-header">
+                            <div>
+                                <h3 class="bi-chart-title">Trạng thái đơn hàng</h3>
+                                <div class="bi-chart-sub" id="repDonutSub">0 bản ghi trong kỳ</div>
+                            </div>
+                        </div>
+                        <div class="chart-content-grid">
+                            <div>
+                                <div id="repDonutSvg" style="position:relative; width:190px; height:190px; margin:0 auto;"></div>
+                                <div id="repDonutLegend" class="donut-legend-row"></div>
+                            </div>
+                            <div class="ai-insight-callout-box">
+                                <div class="callout-header-tag">Nhận định</div>
+                                <div class="callout-body-text" id="repInsightDonut">-</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Progress Bars: Sản phẩm đóng góp doanh thu -->
+                    <div class="bi-chart-card">
+                        <div class="bi-chart-header">
+                            <div>
+                                <h3 class="bi-chart-title">Sản phẩm đóng góp doanh thu</h3>
+                                <div class="bi-chart-sub">8 nhóm dẫn đầu · rê chuột để xem số đơn</div>
+                            </div>
+                        </div>
+                        <div class="chart-content-grid">
+                            <div id="repProductBars"></div>
+                            <div class="ai-insight-callout-box">
+                                <div class="callout-header-tag">Nhận định</div>
+                                <div class="callout-body-text" id="repInsightProduct">-</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Histogram: Phân bố giá trị đơn hàng -->
+                    <div class="bi-chart-card">
+                        <div class="bi-chart-header">
+                            <div>
+                                <h3 class="bi-chart-title">Phân bố giá trị đơn hàng</h3>
+                                <div class="bi-chart-sub">Số đơn theo khoảng doanh thu</div>
+                            </div>
+                        </div>
+                        <div class="chart-content-grid">
+                            <div id="repHistogram"></div>
+                            <div class="ai-insight-callout-box">
+                                <div class="callout-header-tag">Nhận định</div>
+                                <div class="callout-body-text" id="repInsightHistogram">-</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Region Breakdown: Doanh thu theo khu vực -->
+                    <div class="bi-chart-card">
+                        <div class="bi-chart-header">
+                            <div>
+                                <h3 class="bi-chart-title">Doanh thu theo khu vực</h3>
+                                <div class="bi-chart-sub">Phân bổ thực tế theo cột khu vực trong bảng tính</div>
+                            </div>
+                        </div>
+                        <div class="chart-content-grid">
+                            <div id="repRegionBox"></div>
+                            <div class="ai-insight-callout-box">
+                                <div class="callout-header-tag">Nhận định</div>
+                                <div class="callout-body-text" id="repInsightRegion">-</div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- IMAGE 4: Top Products / Services Table -->
+                <section id="rep-sec-ranking" class="bi-chart-card">
+                    <div class="bi-chart-header">
+                        <h3 class="bi-chart-title">Top sản phẩm / dịch vụ</h3>
+                        <input type="text" id="repProductSearch" class="neo-input" placeholder="Tìm tên..." style="width:210px; padding:7px 14px; border-radius:999px;" oninput="renderReportTopProductsTable()">
+                    </div>
+                    <div style="overflow-x:auto;">
+                        <table class="neo-table">
+                            <thead>
+                                <tr>
+                                    <th style="width:70px;">Hạng</th>
+                                    <th>Tên</th>
+                                    <th style="width:120px;">Số đơn</th>
+                                    <th style="width:160px; text-align:right;">Doanh thu</th>
+                                </tr>
+                            </thead>
+                            <tbody id="repTopProductsTbody"></tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- IMAGE 4: 3 Executive Recommendations -->
+                <section id="rep-sec-recs" class="bi-chart-card">
+                    <div class="bi-chart-header">
+                        <div>
+                            <h3 class="bi-chart-title">Đề Xuất Kinh Doanh</h3>
+                            <div class="bi-chart-sub">Gợi ý dựa trên số liệu của kỳ đã chọn; cần đánh giá thêm trước khi triển khai.</div>
+                        </div>
+                    </div>
+                    <div class="recommendations-3col-grid">
+                        <div class="recommendation-card">
+                            <div class="rec-pill-label">01 / Tối Ưu Doanh Thu</div>
+                            <h4 class="rec-card-title" id="repRec1Title">-</h4>
+                            <p class="rec-card-desc" id="repRec1Desc">-</p>
+                        </div>
+                        <div class="recommendation-card">
+                            <div class="rec-pill-label">02 / Giữ Chân Khách VIP</div>
+                            <h4 class="rec-card-title" id="repRec2Title">-</h4>
+                            <p class="rec-card-desc" id="repRec2Desc">-</p>
+                        </div>
+                        <div class="recommendation-card">
+                            <div class="rec-pill-label">03 / Tối Ưu Vận Hành &amp; Biên Lãi</div>
+                            <h4 class="rec-card-title" id="repRec3Title">-</h4>
+                            <p class="rec-card-desc" id="repRec3Desc">-</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Keep Original CSV & JSON Export Downloads -->
+                <section class="bi-chart-card rep-export-actions">
+                    <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:14px;">
+                        <div>
+                            <h4 style="font-size:16px; font-weight:800;">Xuất Dữ Liệu Sạch &amp; Tài Liệu Quản Trị</h4>
+                            <p style="font-size:12.5px; color:var(--paynext-text-muted);">Tải xuống toàn bộ bảng dữ liệu đã qua 5 bước phân tích kèm khuyến nghị AI.</p>
+                        </div>
+                        <div style="display:flex; gap:10px; flex-wrap:wrap;">
+                            <button class="btn-neo-primary" onclick="exportDatasetCSV()">📥 Tải Xuống (.CSV)</button>
+                            <button class="btn-neo-secondary" onclick="exportDatasetJSON()">📥 Tải Xuống (.JSON)</button>
+                            <button class="btn-neo-secondary" onclick="window.print()">🖨️ In / Lưu PDF</button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Feedback Call-To-Action after experiencing the report -->
+                <section class="bi-chart-card rep-export-actions" style="background:linear-gradient(135deg, #4C1D95 0%, #6D28D9 60%, #7C3AED 100%); color:#FFFFFF; border:none;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px;">
+                        <div>
+                            <div style="font-size:12px; font-weight:800; opacity:0.85; letter-spacing:0.5px; margin-bottom:4px;">⭐ PHẢN HỒI KHÁCH HÀNG</div>
+                            <h4 style="font-size:19px; font-weight:800; margin-bottom:4px;">Bạn hài lòng với trải nghiệm phân tích &amp; báo cáo vừa rồi chứ?</h4>
+                            <p style="font-size:13px; opacity:0.9;">Dành 10 giây chấm sao và gửi góp ý để Hoàng Kim Huệ BI ngày càng hoàn thiện hơn!</p>
+                        </div>
+                        <button class="btn-neo-primary" style="background:#FFFFFF; color:#4C1D95;" onclick="switchTab('tab-feedback', event)">⭐ Gửi Đánh Giá Ngay →</button>
+                    </div>
+                </section>
+            </div>
+        </div>
+
+        <!-- ==============================================================================
+             MỤC 8: ⭐ ĐÁNH GIÁ & GÓP Ý TỪ KHÁCH HÀNG (CUSTOMER FEEDBACK)
+        ============================================================================== -->
+        <div id="tab-feedback" class="tab-pane">
+            <div class="report-header-card" style="margin-bottom:22px;">
+                <span class="step-badge-tag" style="background:#FEF3C7; color:#92400E;">⭐ ĐÁNH GIÁ TRẢI NGHIỆM KHÁCH HÀNG</span>
+                <h2 style="font-family:var(--font-heading); font-size:26px; font-weight:900; margin-bottom:6px;">
+                    Chia Sẻ Cảm Nhận Sau Khi Trải Nghiệm Web
+                </h2>
+                <p style="font-size:14px; color:var(--paynext-text-muted);">
+                    Mọi đánh giá và góp ý của bạn về độ dễ nhìn của giao diện, tốc độ làm sạch dữ liệu và báo cáo nghiệm thu đều được ghi nhận trực tiếp.
+                </p>
+            </div>
+
+            <div class="feedback-layout-grid">
+                <!-- Left Column: Interactive Feedback Form -->
+                <div class="neo-card" style="margin-bottom:0;">
+                    <h3 style="font-size:18px; font-weight:800; margin-bottom:14px;">✍️ Gửi Đánh Giá Của Bạn</h3>
+
+                    <div style="margin-bottom:16px;">
+                        <label style="display:block; font-size:12.5px; font-weight:700; margin-bottom:8px;">1. Mức độ hài lòng tổng thể:</label>
+                        <div class="star-rating-picker" id="starRatingPicker">
+                            <button type="button" class="star-btn active" onclick="setFeedbackStars(1)">★</button>
+                            <button type="button" class="star-btn active" onclick="setFeedbackStars(2)">★</button>
+                            <button type="button" class="star-btn active" onclick="setFeedbackStars(3)">★</button>
+                            <button type="button" class="star-btn active" onclick="setFeedbackStars(4)">★</button>
+                            <button type="button" class="star-btn active" onclick="setFeedbackStars(5)">★</button>
+                        </div>
+                        <div id="starRatingLabel" style="font-size:13px; font-weight:700; color:#D97706;">5/5 — Xuất sắc! Rất hài lòng</div>
+                    </div>
+
+                    <div style="margin-bottom:16px;">
+                        <label style="display:block; font-size:12.5px; font-weight:700; margin-bottom:8px;">2. Điểm bạn ấn tượng nhất (chọn nhiều):</label>
+                        <div class="aspect-chips-wrap" id="feedbackAspectChips">
+                            <button type="button" class="aspect-chip selected" onclick="toggleFeedbackAspect(this)">✨ Giao diện dễ nhìn</button>
+                            <button type="button" class="aspect-chip selected" onclick="toggleFeedbackAspect(this)">🧹 Làm sạch dữ liệu chuẩn</button>
+                            <button type="button" class="aspect-chip" onclick="toggleFeedbackAspect(this)">📊 Báo cáo trực quan</button>
+                            <button type="button" class="aspect-chip" onclick="toggleFeedbackAspect(this)">⚡ Xử lý nhanh mượt</button>
+                            <button type="button" class="aspect-chip" onclick="toggleFeedbackAspect(this)">🤖 AI Copilot thông minh</button>
+                        </div>
+                    </div>
+
+                    <div class="auth-field">
+                        <label for="fbCustomerName">3. Họ và tên của bạn *</label>
+                        <input type="text" id="fbCustomerName" class="neo-input" placeholder="VD: Nguyễn Minh Anh">
+                    </div>
+
+                    <div class="auth-field">
+                        <label for="fbCustomerRole">4. Chức vụ / Doanh nghiệp (không bắt buộc)</label>
+                        <input type="text" id="fbCustomerRole" class="neo-input" placeholder="VD: Quản lý Kinh doanh · Công ty ABC">
+                    </div>
+
+                    <div class="auth-field">
+                        <label for="fbComment">5. Nhận xét &amp; góp ý chi tiết *</label>
+                        <textarea id="fbComment" class="neo-input" rows="4" style="width:100%; resize:vertical;" placeholder="Chia sẻ trải nghiệm thực tế của bạn khi sử dụng nền tảng phân tích dữ liệu Hoàng Kim Huệ..."></textarea>
+                    </div>
+
+                    <button type="button" class="btn-neo-primary" style="width:100%; justify-content:center; padding:12px;" onclick="submitCustomerFeedback()">
+                        ⭐ Gửi Đánh Giá Trải Nghiệm
+                    </button>
+                </div>
+
+                <!-- Right Column: Overall Score + Live Reviews Feed -->
+                <div>
+                    <!-- Summary Card -->
+                    <div class="neo-card" style="margin-bottom:20px;">
+                        <div style="display:grid; grid-template-columns:145px 1fr; gap:20px; align-items:center;">
+                            <div style="text-align:center; padding-right:16px; border-right:1px solid var(--paynext-border);">
+                                <div id="fbAvgScore" style="font-family:var(--font-heading); font-size:44px; font-weight:900; color:var(--paynext-primary-dark); line-height:1;">4.9</div>
+                                <div style="color:#F59E0B; font-size:18px; margin:6px 0 4px;">★★★★★</div>
+                                <div id="fbTotalCount" style="font-size:12px; color:var(--paynext-text-muted); font-weight:600;">3 lượt đánh giá</div>
+                            </div>
+                            <div id="fbRatingBars"></div>
+                        </div>
+                    </div>
+
+                    <!-- Live Reviews List -->
+                    <div class="neo-card" style="margin-bottom:0;">
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+                            <h3 style="font-size:17px; font-weight:800;">💬 Đánh Giá Gần Đây</h3>
+                            <span class="badge-verified-blue">● Đã xác thực trải nghiệm</span>
+                        </div>
+                        <div id="feedbackReviewsList"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="portal-footer">
+            <p>Dự án: <b>Hoàng Kim Huệ Project</b> • Nền tảng Phân Tích Dữ Liệu AI Agent Đa Năng</p>
+            <p style="margin-top:4px;">Tác giả &amp; Kiến trúc sư hệ thống: <b>Hoàng Kim Huệ · Data Analyst &amp; Business Intelligence</b> | Host: <code>localhost:8080</code></p>
+        </footer>
+
+    </div>
+
+    <!-- Floating Bottom Pill Navigation (Images 1-4) -->
+    <nav class="floating-bottom-nav">
+        <button id="bottom-nav-intro" class="bottom-nav-item active" onclick="switchTab('tab-intro', event)">Tổng quan</button>
+        <button id="bottom-nav-data" class="bottom-nav-item" onclick="switchTab('tab-step1', event)">Dữ liệu</button>
+        <button id="bottom-nav-report" class="bottom-nav-item" onclick="switchTab('tab-export', event)">Báo cáo</button>
+        <button id="bottom-nav-copilot" class="bottom-nav-item" onclick="switchTab('tab-copilot', event)">Hỏi đáp AI</button>
+        <button id="bottom-nav-feedback" class="bottom-nav-item" onclick="switchTab('tab-feedback', event)">Đánh giá</button>
+    </nav>
+
+    <!-- ==============================================================================
+         AUTH MODAL: BẮT BUỘC ĐĂNG NHẬP TRƯỚC KHI XỬ LÝ DỮ LIỆU
+    ============================================================================== -->
+    <div id="authModal" class="auth-modal-backdrop" onclick="if(event.target===this) closeAuthModal()">
+        <div class="auth-modal-card">
+            <div class="auth-modal-header">
+                <button class="auth-close-btn" onclick="closeAuthModal()" title="Đóng">✕</button>
+                <div style="font-size:11.5px; font-weight:800; opacity:0.85; letter-spacing:0.5px; margin-bottom:4px;">🔐 XÁC THỰC TÀI KHOẢN</div>
+                <h3 style="font-size:21px; font-weight:800; margin-bottom:4px;">Hoàng Kim Huệ · Data BI</h3>
+                <p id="authModalNotice" style="font-size:12.5px; opacity:0.9;">
+                    Vui lòng đăng nhập tài khoản để tải tệp, làm sạch và phân tích dữ liệu bảo mật.
+                </p>
+            </div>
+
+            <div style="padding:22px 26px 26px;">
+                <div class="auth-tabs">
+                    <button id="authTabLogin" class="auth-tab-btn active" onclick="switchAuthMode('login')">Đăng Nhập</button>
+                    <button id="authTabRegister" class="auth-tab-btn" onclick="switchAuthMode('register')">Đăng Ký Mới</button>
+                </div>
+
+                <!-- LOGIN FORM -->
+                <form id="loginForm" onsubmit="handleLoginSubmit(event)">
+                    <div class="auth-field">
+                        <label for="loginEmail">Email / Tên đăng nhập</label>
+                        <input type="text" id="loginEmail" class="neo-input" placeholder="VD: admin@hoangkimhue.vn" required>
+                    </div>
+                    <div class="auth-field">
+                        <label for="loginPassword">Mật khẩu</label>
+                        <input type="password" id="loginPassword" class="neo-input" placeholder="Nhập mật khẩu..." required>
+                    </div>
+                    <div id="loginErrorMsg" style="display:none; color:#DC2626; font-size:12.5px; font-weight:700; margin-bottom:12px;"></div>
+                    <button type="submit" class="btn-neo-primary" style="width:100%; justify-content:center; padding:12px;">
+                        🔓 Đăng Nhập &amp; Bắt Đầu Xử Lý
+                    </button>
+                    <div style="margin-top:14px; padding:10px 12px; background:#F8FAFC; border:1px solid var(--paynext-border); border-radius:12px; font-size:12px; color:var(--paynext-text-muted); text-align:center;">
+                        Tài khoản dùng thử sẵn có: <b>admin@hoangkimhue.vn</b> / <b>123456</b>
+                        <br>
+                        <a href="#" style="color:var(--paynext-primary); font-weight:700; text-decoration:none;" onclick="fillDemoLogin(event)">⚡ Điền nhanh tài khoản dùng thử</a>
+                    </div>
+                </form>
+
+                <!-- REGISTER FORM -->
+                <form id="registerForm" style="display:none;" onsubmit="handleRegisterSubmit(event)">
+                    <div class="auth-field">
+                        <label for="regName">Họ và tên</label>
+                        <input type="text" id="regName" class="neo-input" placeholder="VD: Hoàng Kim Huệ" required>
+                    </div>
+                    <div class="auth-field">
+                        <label for="regEmail">Email đăng nhập</label>
+                        <input type="email" id="regEmail" class="neo-input" placeholder="VD: ban@congty.vn" required>
+                    </div>
+                    <div class="auth-field">
+                        <label for="regPassword">Mật khẩu (tối thiểu 4 ký tự)</label>
+                        <input type="password" id="regPassword" class="neo-input" placeholder="Tạo mật khẩu..." minlength="4" required>
+                    </div>
+                    <div id="regErrorMsg" style="display:none; color:#DC2626; font-size:12.5px; font-weight:700; margin-bottom:12px;"></div>
+                    <button type="submit" class="btn-neo-primary" style="width:100%; justify-content:center; padding:12px;">
+                        ✨ Tạo Tài Khoản &amp; Đăng Nhập Ngay
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Script Logic & System Configuration -->
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+    <script src="config.js"></script>
+    <script src="data.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
